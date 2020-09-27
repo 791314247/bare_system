@@ -166,7 +166,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\bare_sys\bsp\drv_common.c</Filename>
+          <Filename>F:\Gitee\bare_system\bsp\fm\fm33lc026_onenet\bare_sys\bsp\drv_common.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\FM33LC0xx_OneNet\bare_sys/bsp/drv_common.c\71</Expression>
         </Bp>
@@ -336,30 +336,6 @@
     <File>
       <GroupNumber>2</GroupNumber>
       <FileNumber>5</FileNumber>
-      <FileType>2</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\Templates\ARM\startup_fm33lc0xx.s</PathWithFileName>
-      <FilenameWithoutPath>startup_fm33lc0xx.s</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>6</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\system_fm33lc0xx.c</PathWithFileName>
-      <FilenameWithoutPath>system_fm33lc0xx.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>2</GroupNumber>
-      <FileNumber>7</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
@@ -371,13 +347,37 @@
     </File>
     <File>
       <GroupNumber>2</GroupNumber>
-      <FileNumber>8</FileNumber>
+      <FileNumber>6</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\board\board.c</PathWithFileName>
       <FilenameWithoutPath>board.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>7</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\system_fm33lc0xx.c</PathWithFileName>
+      <FilenameWithoutPath>system_fm33lc0xx.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>2</GroupNumber>
+      <FileNumber>8</FileNumber>
+      <FileType>2</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\Templates\ARM\startup_fm33lc0xx.s</PathWithFileName>
+      <FilenameWithoutPath>startup_fm33lc0xx.s</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -396,8 +396,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\bare_sys\bsp\drv_lptim.c</PathWithFileName>
-      <FilenameWithoutPath>drv_lptim.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\HAL_driver\drv_common.c</PathWithFileName>
+      <FilenameWithoutPath>drv_common.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -408,8 +408,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\bare_sys\bsp\drv_common.c</PathWithFileName>
-      <FilenameWithoutPath>drv_common.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\HAL_driver\drv_gpio.c</PathWithFileName>
+      <FilenameWithoutPath>drv_gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -420,8 +420,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\bare_sys\bsp\drv_gpio.c</PathWithFileName>
-      <FilenameWithoutPath>drv_gpio.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\HAL_driver\drv_lptim.c</PathWithFileName>
+      <FilenameWithoutPath>drv_lptim.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -440,8 +440,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\bare_sys\src\timer.c</PathWithFileName>
-      <FilenameWithoutPath>timer.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\src\device.c</PathWithFileName>
+      <FilenameWithoutPath>device.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -452,8 +452,20 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\bare_sys\src\pin.c</PathWithFileName>
+      <PathWithFileName>..\..\..\src\pin.c</PathWithFileName>
       <FilenameWithoutPath>pin.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>14</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\..\src\timer.c</PathWithFileName>
+      <FilenameWithoutPath>timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -467,25 +479,13 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>14</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_adc.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_adc.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>5</GroupNumber>
       <FileNumber>15</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_aes.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_aes.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_adc.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_adc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -496,8 +496,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_atim.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_atim.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_aes.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_aes.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -508,8 +508,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_bstim.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_bstim.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_atim.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_atim.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -520,8 +520,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_comp.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_comp.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_bstim.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_bstim.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -532,8 +532,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_crc.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_crc.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_comp.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_comp.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -544,8 +544,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_dma.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_dma.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_crc.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_crc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -556,8 +556,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_flash.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_flash.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_dma.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_dma.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -568,8 +568,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gpio.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_gpio.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_flash.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_flash.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -580,8 +580,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gptim.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_gptim.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gpio.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_gpio.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -592,8 +592,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_hdiv.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_hdiv.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gptim.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_gptim.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -604,8 +604,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_i2c.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_i2c.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_hdiv.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_hdiv.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -616,8 +616,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_iwdt.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_iwdt.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_i2c.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_i2c.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -628,8 +628,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lcd.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_lcd.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_iwdt.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_iwdt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -640,8 +640,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lptim.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_lptim.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lcd.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_lcd.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -652,8 +652,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lpuart.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_lpuart.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lptim.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_lptim.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -664,8 +664,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_opa.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_opa.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lpuart.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_lpuart.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -676,8 +676,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_pmu.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_pmu.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_opa.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_opa.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -688,8 +688,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rcc.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_rcc.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_pmu.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_pmu.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -700,8 +700,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rng.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_rng.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rcc.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_rcc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -712,8 +712,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rtc.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_rtc.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rng.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_rng.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -724,8 +724,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_spi.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_spi.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rtc.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_rtc.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -736,8 +736,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_svd.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_svd.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_spi.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_spi.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -748,8 +748,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_u7816.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_u7816.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_svd.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_svd.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -760,8 +760,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_uart.c</PathWithFileName>
-      <FilenameWithoutPath>fm33lc0xx_ll_uart.c</FilenameWithoutPath>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_u7816.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_u7816.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -772,7 +772,19 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_wwdt.c</PathWithFileName>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_uart.c</PathWithFileName>
+      <FilenameWithoutPath>fm33lc0xx_ll_uart.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>40</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_wwdt.c</PathWithFileName>
       <FilenameWithoutPath>fm33lc0xx_ll_wwdt.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

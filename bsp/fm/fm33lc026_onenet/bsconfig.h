@@ -3,6 +3,7 @@
 
 /* BS-System Configuration */
 
+#define BS_NAME_MAX 8
 
 
 

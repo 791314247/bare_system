@@ -188,5 +188,122 @@ typedef int (*init_fn_t)(void);
 #define BS_NULL                         (0)
 
 
+
+/**
+ * Double List structure
+ */
+struct bs_list_node
+{
+    struct bs_list_node *next;                          /**< point to next node. */
+    struct bs_list_node *prev;                          /**< point to prev node. */
+};
+typedef struct bs_list_node bs_list_t;                  /**< Type for lists. */
+
+/**
+ * Single List structure
+ */
+struct bs_slist_node
+{
+    struct bs_slist_node *next;                         /**< point to next node. */
+};
+typedef struct bs_slist_node bs_slist_t;                /**< Type for single list. */
+
+
+/**
+ * Base structure of Kernel object
+ */
+struct bs_object
+{
+    char       name[BS_NAME_MAX];                       /**< name of kernel object */
+    bs_uint8_t type;                                    /**< type of kernel object */
+    bs_uint8_t flag;                                    /**< flag of kernel object */
+
+#ifdef BS_USING_MODULE
+    void      *module_id;                               /**< id of application module */
+#endif
+    bs_list_t  list;                                    /**< list node of kernel object */
+};
+typedef struct bs_object *bs_object_t;                  /**< Type for kernel objects. */
+
+
+/**
+ * operations set for device object
+ */
+#ifdef BS_USING_OPS
+struct bs_device_ops {
+    /* common device interface */
+    bs_err_t (*init)(bs_device_t dev);
+    bs_err_t (*open)(bs_device_t dev, bs_uint16_t oflag);
+    bs_err_t (*close)(bs_device_t dev);
+    bs_size_t (*read)(bs_device_t dev, bs_off_t pos, void *buffer, bs_size_t size);
+    bs_size_t (*write)(bs_device_t dev, bs_off_t pos, const void *buffer, bs_size_t size);
+    bs_err_t (*control)(bs_device_t dev, int cmd, void *args);
+};
+#endif
+
+
+/**
+ * device (I/O) class type
+ */
+enum bs_device_class_type
+{
+    RT_Device_Class_Char = 0,                           /**< character device */
+    RT_Device_Class_Block,                              /**< block device */
+    RT_Device_Class_NetIf,                              /**< net interface */
+    RT_Device_Class_MTD,                                /**< memory device */
+    RT_Device_Class_CAN,                                /**< CAN device */
+    RT_Device_Class_RTC,                                /**< RTC device */
+    RT_Device_Class_Sound,                              /**< Sound device */
+    RT_Device_Class_Graphic,                            /**< Graphic device */
+    RT_Device_Class_I2CBUS,                             /**< I2C bus device */
+    RT_Device_Class_USBDevice,                          /**< USB slave device */
+    RT_Device_Class_USBHost,                            /**< USB host bus */
+    RT_Device_Class_SPIBUS,                             /**< SPI bus device */
+    RT_Device_Class_SPIDevice,                          /**< SPI device */
+    RT_Device_Class_SDIO,                               /**< SDIO bus device */
+    RT_Device_Class_PM,                                 /**< PM pseudo device */
+    RT_Device_Class_Pipe,                               /**< Pipe device */
+    RT_Device_Class_Portal,                             /**< Portal device */
+    RT_Device_Class_Timer,                              /**< Timer device */
+    RT_Device_Class_Miscellaneous,                      /**< Miscellaneous device */
+    RT_Device_Class_Sensor,                             /**< Sensor device */
+    RT_Device_Class_Touch,                              /**< Touch device */
+    RT_Device_Class_Unknown                             /**< unknown device */
+};
+
+
+/**
+ * Device structure
+ */
+typedef struct bs_device *bs_device_t;
+struct bs_device {
+    struct bs_object          parent;                   /**< inherit from bs_object */
+
+    enum bs_device_class_type type;                     /**< device type */
+    bs_uint16_t               flag;                     /**< device flag */
+    bs_uint16_t               open_flag;                /**< device open flag */
+
+    bs_uint8_t                ref_count;                /**< reference count */
+    bs_uint8_t                device_id;                /**< 0 - 255 */
+
+    /* device call back */
+    bs_err_t (*rx_indicate)(bs_device_t dev, bs_size_t size);
+    bs_err_t (*tx_complete)(bs_device_t dev, void *buffer);
+
+#ifdef BS_USING_DEVICE_OPS
+    const struct bs_device_ops *ops;
+#else
+    /* common device interface */
+    bs_err_t (*init)(bs_device_t dev);
+    bs_err_t (*open)(bs_device_t dev, bs_uint16_t oflag);
+    bs_err_t (*close)(bs_device_t dev);
+    bs_size_t (*read)(bs_device_t dev, bs_off_t pos, void *buffer, bs_size_t size);
+    bs_size_t (*write)(bs_device_t dev, bs_off_t pos, const void *buffer, bs_size_t size);
+    bs_err_t (*control)(bs_device_t dev, int cmd, void *args);
+#endif
+    void *user_data;                /**< device private data */
+};
+
+
 #endif /* end */
 

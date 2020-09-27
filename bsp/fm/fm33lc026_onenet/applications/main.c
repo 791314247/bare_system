@@ -14,10 +14,14 @@
 #include "bsdevice.h"
 
 
-static SoftTimer led0;
+static SoftTimer led1;
+static SoftTimer led2;
+static SoftTimer led3;
 static SoftTimer led4;
 
 #define LED1_PIN    GET_PIN(C, 0)
+#define LED2_PIN    GET_PIN(C, 1)
+#define LED3_PIN    GET_PIN(B, 10)
 #define LED4_PIN    GET_PIN(B, 9)
 
 
@@ -38,6 +42,22 @@ static void led1_timeout(void)
         bs_pin_write(LED1_PIN, PIN_HIGH);
 }
 
+static void led2_timeout(void)
+{
+    if (bs_pin_read(LED2_PIN) == PIN_HIGH)
+        bs_pin_write(LED2_PIN, PIN_LOW);
+    else
+        bs_pin_write(LED2_PIN, PIN_HIGH);
+}
+
+static void led3_timeout(void)
+{
+    if (bs_pin_read(LED3_PIN) == PIN_HIGH)
+        bs_pin_write(LED3_PIN, PIN_LOW);
+    else
+        bs_pin_write(LED3_PIN, PIN_HIGH);
+}
+
 static void led4_timeout(void)
 {
     if (bs_pin_read(LED4_PIN) == PIN_HIGH)
@@ -51,12 +71,18 @@ int main(void)
 {
     /* set LED0 pin mode to output */
     bs_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
+    bs_pin_mode(LED2_PIN, PIN_MODE_OUTPUT);
+    bs_pin_mode(LED3_PIN, PIN_MODE_OUTPUT);
     bs_pin_mode(LED4_PIN, PIN_MODE_OUTPUT);
 
-    creat_continue_soft_timer(&led0, RUN_IN_LOOP_MODE,
+    creat_continue_soft_timer(&led1, RUN_IN_LOOP_MODE,
                               TIMER_100MS_DELAY * 2, led1_timeout);
+    creat_continue_soft_timer(&led2, RUN_IN_LOOP_MODE,
+                              TIMER_100MS_DELAY * 3, led2_timeout);
+    creat_continue_soft_timer(&led3, RUN_IN_LOOP_MODE,
+                              TIMER_100MS_DELAY * 4, led3_timeout);
     creat_continue_soft_timer(&led4, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 1, led4_timeout);
+                              TIMER_100MS_DELAY * 5, led4_timeout);
 
     while (1) {
         soft_timer_main_loop();

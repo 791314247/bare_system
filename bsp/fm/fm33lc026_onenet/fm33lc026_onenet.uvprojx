@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>FM33LC0XX,USE_FULL_ASSERT,_DLIB_FILE_DESCRIPTOR</Define>
               <Undefine></Undefine>
-              <IncludePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Inc;.\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Include;.\libraries\FM33LC0xx_LL\CMSIS\Inculde;.\applications\include;..\fm33lc026_onenet;.\board;.\bare_sys\include;.\bare_sys\bsp;.\bare_sys</IncludePath>
+              <IncludePath>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Include;..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Inc;..\libraries\FM33LC0xx_LL\CMSIS\Inculde;..\libraries\HAL_driver;.\applications\include;..\fm33lc026_onenet;.\board;..\..\..\include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -407,16 +407,6 @@
           <GroupName>Board</GroupName>
           <Files>
             <File>
-              <FileName>startup_fm33lc0xx.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\Templates\ARM\startup_fm33lc0xx.s</FilePath>
-            </File>
-            <File>
-              <FileName>system_fm33lc0xx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\system_fm33lc0xx.c</FilePath>
-            </File>
-            <File>
               <FileName>board.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\board\board.h</FilePath>
@@ -426,25 +416,35 @@
               <FileType>1</FileType>
               <FilePath>.\board\board.c</FilePath>
             </File>
+            <File>
+              <FileName>system_fm33lc0xx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\system_fm33lc0xx.c</FilePath>
+            </File>
+            <File>
+              <FileName>startup_fm33lc0xx.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Source\Templates\ARM\startup_fm33lc0xx.s</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Drivers</GroupName>
           <Files>
             <File>
-              <FileName>drv_lptim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\bare_sys\bsp\drv_lptim.c</FilePath>
-            </File>
-            <File>
               <FileName>drv_common.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\bare_sys\bsp\drv_common.c</FilePath>
+              <FilePath>..\libraries\HAL_driver\drv_common.c</FilePath>
             </File>
             <File>
               <FileName>drv_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\bare_sys\bsp\drv_gpio.c</FilePath>
+              <FilePath>..\libraries\HAL_driver\drv_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_lptim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\HAL_driver\drv_lptim.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -452,14 +452,19 @@
           <GroupName>Bare_sys</GroupName>
           <Files>
             <File>
-              <FileName>timer.c</FileName>
+              <FileName>device.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\bare_sys\src\timer.c</FilePath>
+              <FilePath>..\..\..\src\device.c</FilePath>
             </File>
             <File>
               <FileName>pin.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\bare_sys\src\pin.c</FilePath>
+              <FilePath>..\..\..\src\pin.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -469,132 +474,132 @@
             <File>
               <FileName>fm33lc0xx_ll_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_adc.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_adc.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_aes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_aes.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_aes.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_atim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_atim.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_atim.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_bstim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_bstim.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_bstim.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_comp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_comp.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_comp.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_crc.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_crc.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_dma.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_dma.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_flash.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_flash.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gpio.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gpio.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_gptim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gptim.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_gptim.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_hdiv.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_hdiv.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_hdiv.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_i2c.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_i2c.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_iwdt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_iwdt.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_iwdt.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lcd.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lcd.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_lptim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lptim.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lptim.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_lpuart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lpuart.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_lpuart.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_opa.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_opa.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_opa.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_pmu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_pmu.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_pmu.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rcc.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rcc.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rng.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rng.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rtc.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_rtc.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_spi.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_spi.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_svd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_svd.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_svd.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_u7816.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_u7816.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_u7816.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_uart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_uart.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_uart.c</FilePath>
             </File>
             <File>
               <FileName>fm33lc0xx_ll_wwdt.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_wwdt.c</FilePath>
+              <FilePath>..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Src\fm33lc0xx_ll_wwdt.c</FilePath>
             </File>
           </Files>
         </Group>
