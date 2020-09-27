@@ -227,9 +227,38 @@ typedef struct bs_object *bs_object_t;                  /**< Type for kernel obj
 
 
 /**
+ * device (I/O) class type
+ */
+enum bs_device_class_type
+{
+    BS_Device_Class_Char = 0,                           /**< character device */
+    BS_Device_Class_Block,                              /**< block device */
+    BS_Device_Class_NetIf,                              /**< net interface */
+    BS_Device_Class_MTD,                                /**< memory device */
+    BS_Device_Class_CAN,                                /**< CAN device */
+    BS_Device_Class_RTC,                                /**< RTC device */
+    BS_Device_Class_Sound,                              /**< Sound device */
+    BS_Device_Class_Graphic,                            /**< Graphic device */
+    BS_Device_Class_I2CBUS,                             /**< I2C bus device */
+    BS_Device_Class_USBDevice,                          /**< USB slave device */
+    BS_Device_Class_USBHost,                            /**< USB host bus */
+    BS_Device_Class_SPIBUS,                             /**< SPI bus device */
+    BS_Device_Class_SPIDevice,                          /**< SPI device */
+    BS_Device_Class_SDIO,                               /**< SDIO bus device */
+    BS_Device_Class_PM,                                 /**< PM pseudo device */
+    BS_Device_Class_Pipe,                               /**< Pipe device */
+    BS_Device_Class_Portal,                             /**< Portal device */
+    BS_Device_Class_Timer,                              /**< Timer device */
+    BS_Device_Class_Miscellaneous,                      /**< Miscellaneous device */
+    BS_Device_Class_Sensor,                             /**< Sensor device */
+    BS_Device_Class_Touch,                              /**< Touch device */
+    BS_Device_Class_Unknown                             /**< unknown device */
+};
+
+typedef struct bs_device *bs_device_t;
+/**
  * operations set for device object
  */
-#ifdef BS_USING_OPS
 struct bs_device_ops {
     /* common device interface */
     bs_err_t (*init)(bs_device_t dev);
@@ -239,43 +268,10 @@ struct bs_device_ops {
     bs_size_t (*write)(bs_device_t dev, bs_off_t pos, const void *buffer, bs_size_t size);
     bs_err_t (*control)(bs_device_t dev, int cmd, void *args);
 };
-#endif
-
-
-/**
- * device (I/O) class type
- */
-enum bs_device_class_type
-{
-    RT_Device_Class_Char = 0,                           /**< character device */
-    RT_Device_Class_Block,                              /**< block device */
-    RT_Device_Class_NetIf,                              /**< net interface */
-    RT_Device_Class_MTD,                                /**< memory device */
-    RT_Device_Class_CAN,                                /**< CAN device */
-    RT_Device_Class_RTC,                                /**< RTC device */
-    RT_Device_Class_Sound,                              /**< Sound device */
-    RT_Device_Class_Graphic,                            /**< Graphic device */
-    RT_Device_Class_I2CBUS,                             /**< I2C bus device */
-    RT_Device_Class_USBDevice,                          /**< USB slave device */
-    RT_Device_Class_USBHost,                            /**< USB host bus */
-    RT_Device_Class_SPIBUS,                             /**< SPI bus device */
-    RT_Device_Class_SPIDevice,                          /**< SPI device */
-    RT_Device_Class_SDIO,                               /**< SDIO bus device */
-    RT_Device_Class_PM,                                 /**< PM pseudo device */
-    RT_Device_Class_Pipe,                               /**< Pipe device */
-    RT_Device_Class_Portal,                             /**< Portal device */
-    RT_Device_Class_Timer,                              /**< Timer device */
-    RT_Device_Class_Miscellaneous,                      /**< Miscellaneous device */
-    RT_Device_Class_Sensor,                             /**< Sensor device */
-    RT_Device_Class_Touch,                              /**< Touch device */
-    RT_Device_Class_Unknown                             /**< unknown device */
-};
-
 
 /**
  * Device structure
  */
-typedef struct bs_device *bs_device_t;
 struct bs_device {
     struct bs_object          parent;                   /**< inherit from bs_object */
 
@@ -290,9 +286,8 @@ struct bs_device {
     bs_err_t (*rx_indicate)(bs_device_t dev, bs_size_t size);
     bs_err_t (*tx_complete)(bs_device_t dev, void *buffer);
 
-#ifdef BS_USING_DEVICE_OPS
     const struct bs_device_ops *ops;
-#else
+#ifdef BS_USING_CLOSE_OPS
     /* common device interface */
     bs_err_t (*init)(bs_device_t dev);
     bs_err_t (*open)(bs_device_t dev, bs_uint16_t oflag);

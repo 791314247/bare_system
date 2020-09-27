@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006-2018, BS-Thread Development Team
+ * Copyright (c) 2006-2018
  *
  * SPDX-License-Identifier: Apache-2.0
  *

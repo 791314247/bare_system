@@ -1,12 +1,10 @@
 /*
- * Copyright (c) 2006-2018, bs-Thread Development Team
+ * Copyright (c) 2006-2018
  *
  * SPDX-License-Identifier: Apache-2.0
  *
  * Change Logs:
  * Date           Author       Notes
- * 2015-01-20     Bernard      the first version
- * 2017-10-20      ZYH          add mode open drain and input pull down
  */
 
 #ifndef PIN_H__

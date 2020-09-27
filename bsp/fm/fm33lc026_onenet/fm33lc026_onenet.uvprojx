@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>FM33LC0XX,USE_FULL_ASSERT,_DLIB_FILE_DESCRIPTOR</Define>
               <Undefine></Undefine>
-              <IncludePath>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Include;..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Inc;..\libraries\FM33LC0xx_LL\CMSIS\Inculde;..\libraries\HAL_driver;.\applications\include;..\fm33lc026_onenet;.\board;..\..\..\include</IncludePath>
+              <IncludePath>..\libraries\FM33LC0xx_LL\CMSIS\Device\FM\FM33xx\Include;..\libraries\FM33LC0xx_LL\FM33LC0xx_LL_Driver\Inc;..\libraries\FM33LC0xx_LL\CMSIS\Inculde;..\libraries\HAL_driver;.\applications\include;..\fm33lc026_onenet;.\board;..\..\..\include;..\..\..\include\icp;..\..\..\include\ocp</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -457,14 +457,19 @@
               <FilePath>..\..\..\src\device.c</FilePath>
             </File>
             <File>
-              <FileName>pin.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\src\pin.c</FilePath>
-            </File>
-            <File>
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\src\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>pin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\libmod\icp\pin.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\libmod\icp\serial.c</FilePath>
             </File>
           </Files>
         </Group>

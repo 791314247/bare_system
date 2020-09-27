@@ -86,7 +86,7 @@ int main(void)
 
     while (1) {
         soft_timer_main_loop();
-        DeepSleep();
+        //DeepSleep();
     }
 }
 
