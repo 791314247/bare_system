@@ -11,9 +11,11 @@
 #define __BARE_SYS_H_
 
 #define BS_ASSERT(EX)
+#define kprintf(...)
 
 #include <bsconfig.h>
 #include <bsdef.h>
+
 
 /*
  * device (I/O) system interface
@@ -22,6 +24,15 @@ bs_device_t bs_device_find(const char *name);
 bs_err_t bs_device_register(bs_device_t dev,
                             const char *name,
                             bs_uint16_t flags);
+bs_size_t bs_device_read(bs_device_t dev,
+                         bs_off_t    pos,
+                         void       *buffer,
+                         bs_size_t   size);
+bs_size_t bs_device_write(bs_device_t dev,
+                          bs_off_t    pos,
+                          const void *buffer,
+                          bs_size_t   size);
+bs_err_t bs_device_control(bs_device_t dev, int cmd, void *arg);
 
 /*
  * kernel object interface

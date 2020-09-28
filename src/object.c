@@ -88,11 +88,8 @@ struct bs_object *bs_object_find_node_from_name(const char *name)
  */
 void bs_object_init(struct bs_object *object, const char *name)
 {
-    struct bs_object *node;
-
     /* try to find object */
-    node = bs_object_find_node(object);
-    BS_ASSERT(node == BS_NULL);
+    BS_ASSERT(node == bs_object_find_node(object));
 
     /* initialize object's parameters */
     bs_strncpy(object->name, name, BS_NAME_MAX);

@@ -70,6 +70,8 @@ static void led4_timeout(void)
 
 int main(void)
 {
+    bs_device_t temp = BS_NULL;
+
     /* set LED0 pin mode to output */
     bs_pin_mode(LED1_PIN, PIN_MODE_OUTPUT);
     bs_pin_mode(LED2_PIN, PIN_MODE_OUTPUT);
@@ -84,6 +86,12 @@ int main(void)
                               TIMER_100MS_DELAY * 4, led3_timeout);
     creat_continue_soft_timer(&led4, RUN_IN_LOOP_MODE,
                               TIMER_100MS_DELAY * 5, led4_timeout);
+
+    temp = bs_device_find("name");
+    if (temp == BS_NULL) {
+        while(1);
+    }
+    bs_device_open(temp);
 
     while (1) {
         soft_timer_main_loop();
