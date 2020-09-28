@@ -20,17 +20,17 @@ static bs_bool_t is_node_already_creat(SoftTimer *node);
  */
 void soft_timer_main_loop(void)
 {
-    struct SoftTimer *p1 = head_point;
+    struct SoftTimer *list = head_point;
 
-    while (p1 != BS_NULL) { //下一个节点如果不为空
-        if (p1->loop_flag == BS_TRUE) {
-            p1->loop_flag = BS_FALSE;
-            p1->callback_function();
-            if (p1->start_flag != BS_TRUE)
-                delete_node(p1);   /* 如果定时器被删除就删除节点 */
+    while (list != BS_NULL) { //下一个节点如果不为空
+        if (list->loop_flag == BS_TRUE) {
+            list->loop_flag = BS_FALSE;
+            list->callback_function();
+            if (list->start_flag != BS_TRUE)
+                delete_node(list);   /* 如果定时器被删除就删除节点 */
         }
         /*  寻找下一个有意义的节点  */
-        p1 = p1->next;
+        list = list->next;
     }
 }
 
@@ -200,7 +200,7 @@ void stop_timer(SoftTimer *p)
 
 static struct SoftTimer *creat_node(SoftTimer *node)
 {
-    struct SoftTimer *p1;   //p1保存当前需要检查的节点的地址
+    struct SoftTimer *list;   //list保存当前需要检查的节点的地址
     if (node == BS_NULL)
         return head_point;
 
@@ -213,38 +213,35 @@ static struct SoftTimer *creat_node(SoftTimer *node)
         node->next = BS_NULL;
         return head_point;
     }
-    p1 = head_point;
-    while (p1->next != BS_NULL) {
-        p1 = p1->next;       //后移一个节点
+    list = head_point;
+    while (list->next != BS_NULL) {
+        list = list->next;       //后移一个节点
     }
-
-    if (p1->next == BS_NULL) { //将该节点插入链表的末尾
-        p1->next = node;
-        node->next = BS_NULL;
-    }
+    list->next = node;
+    node->next = BS_NULL;
     return head_point;
 }
 
 
 static char delete_node(SoftTimer *node)
 {
-    struct SoftTimer *p1;   //p1保存当前需要检查的节点的地址
+    struct SoftTimer *list;   //list保存当前需要检查的节点的地址
     struct SoftTimer *temp;
     if (node == BS_NULL)
         return 1;
 
-    p1 = head_point;
+    list = head_point;
     if (node == head_point) {
         head_point = head_point->next;    /* 如果要删除头指针，就将头指针后移  */
     } else {
-        while (p1 != BS_NULL) { /*头节点如果不为空 */
-            temp = p1;     /* 记录当前节点 */
-            p1 = p1->next; /* 检索的是下一个节点  */
-            if (p1 == BS_NULL) {
+        while (list != BS_NULL) { /*头节点如果不为空 */
+            temp = list;     /* 记录当前节点 */
+            list = list->next; /* 检索的是下一个节点  */
+            if (list == BS_NULL) {
                 return 1;
             }
-            if (p1 == node) {
-                temp->next = p1->next; /* 删除此节点 */
+            if (list == node) {
+                temp->next = list->next; /* 删除此节点 */
                 return 0;
             }
         }
@@ -255,15 +252,15 @@ static char delete_node(SoftTimer *node)
 
 static bs_bool_t is_node_already_creat(SoftTimer *node)
 {
-    struct SoftTimer *p1;   //p1保存当前需要检查的节点的地址
+    struct SoftTimer *list;   //list保存当前需要检查的节点的地址
     if (node == BS_NULL)
         return BS_FALSE;
 
-    p1 = head_point;
-    while (p1 != BS_NULL) {
-        if (p1 == node)
+    list = head_point;
+    while (list != BS_NULL) {
+        if (list == node)
             return BS_TRUE;
-        p1 = p1->next;       //后移一个节点
+        list = list->next;       //后移一个节点
     }
     return BS_FALSE;
 }
@@ -277,38 +274,38 @@ static bs_bool_t is_node_already_creat(SoftTimer *node)
  */
 void timer_handler(void)
 {
-    struct SoftTimer *p1 = head_point;
+    struct SoftTimer *list = head_point;
 
-    while (p1 != BS_NULL) { //下一个节点如果不为空
-        if (p1->start_flag != BS_FALSE) { /* 判断当前定时器是否被开启  */
-            if (++p1->counter >= p1->duration) { /* 判断当前计时有没有到达 */
-                switch (p1->timing_mode) {
+    while (list != BS_NULL) { //下一个节点如果不为空
+        if (list->start_flag != BS_FALSE) { /* 判断当前定时器是否被开启  */
+            if (++list->counter >= list->duration) { /* 判断当前计时有没有到达 */
+                switch (list->timing_mode) {
                 case ONCE_MODE:
-                    p1->start_flag = BS_FALSE;
+                    list->start_flag = BS_FALSE;
                     break;
                 case CONTINUE_MODE:
                     break;
 #ifdef ENABLE_CUSTOM_RUN_NUM
                 case CUSTOM_NUM_MODE:
-                    if (p1->run_num > 0) {
-                        if (--p1->run_num == 0) {
-                            p1->start_flag = BS_FALSE;
+                    if (list->run_num > 0) {
+                        if (--list->run_num == 0) {
+                            list->start_flag = BS_FALSE;
                         }
                     }
 #endif
                 default:
                     break;
                 }
-                if (p1->run_mode == RUN_IN_INTERRUPT_MODE) {
-                    p1->callback_function();   /* 中断内直接运行回调函数，用于实时性比较高的程序 */
-                    if (p1->start_flag != BS_TRUE)
-                        delete_node(p1);
+                if (list->run_mode == RUN_IN_INTERRUPT_MODE) {
+                    list->callback_function();   /* 中断内直接运行回调函数，用于实时性比较高的程序 */
+                    if (list->start_flag != BS_TRUE)
+                        delete_node(list);
                 } else
-                    p1->loop_flag = BS_TRUE;
-                p1->counter = 0;
+                    list->loop_flag = BS_TRUE;
+                list->counter = 0;
             }
         }
         /*  寻找下一个有意义的节点  */
-        p1 = p1->next;
+        list = list->next;
     }
 }

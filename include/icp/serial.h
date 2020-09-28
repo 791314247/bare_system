@@ -7,8 +7,8 @@
  * Date           Author       Notes
  */
 
-#ifndef PIN_H__
-#define PIN_H__
+#ifndef __SERIAL_H__
+#define __SERIAL_H__
 
 #include <bare_sys.h>
 
@@ -42,10 +42,10 @@ struct bs_serial_device
 };
 typedef struct bs_serial_device bs_serial_t;
 
-
-
-
-
+bs_err_t bs_hw_serial_register(struct bs_serial_device *serial,
+                               const char              *name,
+                               bs_uint32_t              flag,
+                               void                    *data);
 
 
 

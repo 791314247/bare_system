@@ -1,29 +1,52 @@
 /*
- * Copyright (c) 2006-2018, RT-Thread Development Team
+ * Copyright (c) 2006-2018
  *
  * SPDX-License-Identifier: Apache-2.0
  *
  * Change Logs:
  * Date           Author       Notes
- * 2006-03-18     Bernard      the first version
- * 2006-04-26     Bernard      add semaphore APIs
- * 2006-08-10     Bernard      add version information
- * 2007-01-28     Bernard      rename RT_OBJECT_Class_Static to RT_Object_Class_Static
- * 2007-03-03     Bernard      clean up the definitions to rtdef.h
- * 2010-04-11     yi.qiu       add module feature
- * 2013-06-24     Bernard      add rt_kprintf re-define when not use RT_USING_CONSOLE.
- * 2016-08-09     ArdaFu       add new thread and interrupt hook.
- * 2018-11-22     Jesven       add all cpu's lock and ipi handler
  */
 
-#ifndef __BARE_SYS_H
-#define __BARE_SYS_H
+#ifndef __BARE_SYS_H_
+#define __BARE_SYS_H_
 
 #define BS_ASSERT(EX)
 
 #include <bsconfig.h>
 #include <bsdef.h>
 
+/*
+ * device (I/O) system interface
+ */
+bs_device_t bs_device_find(const char *name);
+bs_err_t bs_device_register(bs_device_t dev,
+                            const char *name,
+                            bs_uint16_t flags);
+
+/*
+ * kernel object interface
+ */
+struct bs_object *bs_object_find_node_from_name(const char *name);
+void bs_object_init(struct bs_object *object, const char *name);
+
+
+/*
+ * standard function interface
+ */
+void *bs_memset(void *src, int c, bs_ubase_t n);
+void *bs_memcpy(void *dest, const void *src, bs_ubase_t n);
+
+bs_int32_t bs_strncmp(const char *cs, const char *ct, bs_ubase_t count);
+bs_int32_t bs_strcmp(const char *cs, const char *ct);
+bs_size_t bs_strlen(const char *src);
+bs_size_t bs_strnlen(const char *s, bs_ubase_t maxlen);
+char *bs_strdup(const char *s);
+char *bs_strstr(const char *str1, const char *str2);
+bs_int32_t bs_sscanf(const char *buf, const char *fmt, ...);
+char *bs_strncpy(char *dest, const char *src, bs_ubase_t n);
+void *bs_memmove(void *dest, const void *src, bs_ubase_t n);
+bs_int32_t bs_memcmp(const void *cs, const void *ct, bs_ubase_t count);
+bs_uint32_t bs_strcasecmp(const char *a, const char *b);
 
 
 

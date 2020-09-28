@@ -8,6 +8,7 @@
  * 2018-11-27     balanceTWK   first version
  */
 
+#include <bare_sys.h>
 #include <board.h>
 #include "main.h"
 #include "sleep.h"

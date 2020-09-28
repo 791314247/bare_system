@@ -446,6 +446,26 @@
               <FileType>1</FileType>
               <FilePath>..\libraries\HAL_driver\drv_lptim.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\HAL_driver\drv_uart.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DeviceDrivers</GroupName>
+          <Files>
+            <File>
+              <FileName>pin.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\libmod\icp\pin.c</FilePath>
+            </File>
+            <File>
+              <FileName>serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\libmod\icp\serial.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -462,14 +482,14 @@
               <FilePath>..\..\..\src\timer.c</FilePath>
             </File>
             <File>
-              <FileName>pin.c</FileName>
+              <FileName>kservice.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\libmod\icp\pin.c</FilePath>
+              <FilePath>..\..\..\src\kservice.c</FilePath>
             </File>
             <File>
-              <FileName>serial.c</FileName>
+              <FileName>object.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\libmod\icp\serial.c</FilePath>
+              <FilePath>..\..\..\src\object.c</FilePath>
             </File>
           </Files>
         </Group>

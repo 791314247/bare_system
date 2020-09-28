@@ -187,7 +187,58 @@ typedef int (*init_fn_t)(void);
  */
 #define BS_NULL                         (0)
 
+/**
+ * device flags defitions
+ */
+#define BS_DEVICE_FLAG_DEACTIVATE       0x000           /**< device is not not initialized */
 
+#define BS_DEVICE_FLAG_RDONLY           0x001           /**< read only */
+#define BS_DEVICE_FLAG_WRONLY           0x002           /**< write only */
+#define BS_DEVICE_FLAG_RDWR             0x003           /**< read and write */
+
+#define BS_DEVICE_FLAG_REMOVABLE        0x004           /**< removable device */
+#define BS_DEVICE_FLAG_STANDALONE       0x008           /**< standalone device */
+#define BS_DEVICE_FLAG_ACTIVATED        0x010           /**< device is activated */
+#define BS_DEVICE_FLAG_SUSPENDED        0x020           /**< device is suspended */
+#define BS_DEVICE_FLAG_STREAM           0x040           /**< stream mode */
+
+#define BS_DEVICE_FLAG_INT_RX           0x100           /**< INT mode on Rx */
+#define BS_DEVICE_FLAG_DMA_RX           0x200           /**< DMA mode on Rx */
+#define BS_DEVICE_FLAG_INT_TX           0x400           /**< INT mode on Tx */
+#define BS_DEVICE_FLAG_DMA_TX           0x800           /**< DMA mode on Tx */
+
+#define BS_DEVICE_OFLAG_CLOSE           0x000           /**< device is closed */
+#define BS_DEVICE_OFLAG_RDONLY          0x001           /**< read only access */
+#define BS_DEVICE_OFLAG_WRONLY          0x002           /**< write only access */
+#define BS_DEVICE_OFLAG_RDWR            0x003           /**< read and write */
+#define BS_DEVICE_OFLAG_OPEN            0x008           /**< device is opened */
+#define BS_DEVICE_OFLAG_MASK            0xf0f           /**< mask of open flag */
+
+/**
+ * general device commands
+ */
+#define BS_DEVICE_CTRL_RESUME           0x01            /**< resume device */
+#define BS_DEVICE_CTRL_SUSPEND          0x02            /**< suspend device */
+#define BS_DEVICE_CTRL_CONFIG           0x03            /**< configure device */
+
+#define BS_DEVICE_CTRL_SET_INT          0x10            /**< set interrupt */
+#define BS_DEVICE_CTRL_CLR_INT          0x11            /**< clear interrupt */
+#define BS_DEVICE_CTRL_GET_INT          0x12            /**< get interrupt status */
+
+/**
+ * special device commands
+ */
+#define BS_DEVICE_CTRL_CHAR_STREAM      0x10            /**< stream mode on char device */
+#define BS_DEVICE_CTRL_BLK_GETGEOME     0x10            /**< get geometry information   */
+#define BS_DEVICE_CTRL_BLK_SYNC         0x11            /**< flush data to block device */
+#define BS_DEVICE_CTRL_BLK_ERASE        0x12            /**< erase block on block device */
+#define BS_DEVICE_CTRL_BLK_AUTOREFRESH  0x13            /**< block device : enter/exit auto refresh mode */
+#define BS_DEVICE_CTRL_NETIF_GETMAC     0x10            /**< get mac address */
+#define BS_DEVICE_CTRL_MTD_FORMAT       0x10            /**< format a MTD device */
+#define BS_DEVICE_CTRL_RTC_GET_TIME     0x10            /**< get time */
+#define BS_DEVICE_CTRL_RTC_SET_TIME     0x11            /**< set time */
+#define BS_DEVICE_CTRL_RTC_GET_ALARM    0x12            /**< get alarm */
+#define BS_DEVICE_CTRL_RTC_SET_ALARM    0x13            /**< set alarm */
 
 /**
  * Double List structure
@@ -217,11 +268,7 @@ struct bs_object
     char       name[BS_NAME_MAX];                       /**< name of kernel object */
     bs_uint8_t type;                                    /**< type of kernel object */
     bs_uint8_t flag;                                    /**< flag of kernel object */
-
-#ifdef BS_USING_MODULE
-    void      *module_id;                               /**< id of application module */
-#endif
-    bs_list_t  list;                                    /**< list node of kernel object */
+    struct bs_object *next;                                    /**< list node of kernel object */
 };
 typedef struct bs_object *bs_object_t;                  /**< Type for kernel objects. */
 
