@@ -10,7 +10,7 @@
 
 #include <serial.h>
 
-static struct bs_serial_device _hw_serial;
+//static struct bs_serial_device _hw_serial;
 
 /*
  * This function initializes serial device.
