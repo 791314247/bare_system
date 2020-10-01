@@ -26,9 +26,9 @@ int bs_hw_usart_init(void)
     bs_err_t result = 0;
 
     /* init UART object */
-
+    
     /* register UART device */
-    result = bs_hw_serial_register(&serial, "name",
+    result = bs_hw_serial_register(&serial, "uart1",
                                    BS_DEVICE_FLAG_RDWR
                                    | BS_DEVICE_FLAG_INT_RX
                                    | BS_DEVICE_FLAG_INT_TX

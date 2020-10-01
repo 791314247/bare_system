@@ -87,11 +87,12 @@ int main(void)
     creat_continue_soft_timer(&led4, RUN_IN_LOOP_MODE,
                               TIMER_100MS_DELAY * 5, led4_timeout);
 
-    temp = bs_device_find("name");
+    temp = bs_device_find("uart1");
     if (temp == BS_NULL) {
         while(1);
     }
-    bs_device_open(temp);
+    bs_device_open(temp, BS_DEVICE_FLAG_RDWR);
+    bs_device_write(temp, 0, BS_NULL, 1);
 
     while (1) {
         soft_timer_main_loop();

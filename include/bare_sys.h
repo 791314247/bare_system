@@ -24,6 +24,8 @@ bs_device_t bs_device_find(const char *name);
 bs_err_t bs_device_register(bs_device_t dev,
                             const char *name,
                             bs_uint16_t flags);
+bs_err_t bs_device_open(bs_device_t dev, bs_uint16_t oflag);
+bs_err_t bs_device_close(bs_device_t dev);
 bs_size_t bs_device_read(bs_device_t dev,
                          bs_off_t    pos,
                          void       *buffer,
