@@ -17,7 +17,21 @@ static struct bs_serial_device _hw_serial;
  */
 static bs_err_t bs_serial_init(struct bs_device *dev)
 {
-    return BS_EOK;
+    bs_err_t result = BS_EOK;
+    struct bs_serial_device *serial;
+
+    BS_ASSERT(dev != BS_NULL);
+    serial = (struct bs_serial_device *)dev;
+
+    /* initialize rx/tx */
+    serial->serial_rx = BS_NULL;
+    serial->serial_tx = BS_NULL;
+
+    /* apply configuration */
+    if (serial->ops->configure)
+        result = serial->ops->configure(serial, &serial->config);
+
+    return result;
 }
 
 static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
