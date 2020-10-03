@@ -7,7 +7,7 @@
 
 
 
-
+#define BSP_USING_UART0
 
 
 

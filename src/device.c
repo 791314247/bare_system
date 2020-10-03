@@ -231,8 +231,24 @@ bs_err_t bs_device_control(bs_device_t dev, int cmd, void *arg)
     return 0;
 }
 
+/**
+ * This function will set the reception indication callback function. This callback function
+ * is invoked when this device receives data.
+ *
+ * @param dev the pointer of device driver structure
+ * @param rx_ind the indication callback function
+ *
+ * @return RT_EOK
+ */
+bs_err_t
+bs_device_set_rx_indicate(bs_device_t dev,
+                          bs_err_t (*rx_ind)(bs_device_t dev, bs_size_t size))
+{
+    BS_ASSERT(dev != BS_NULL);
+    dev->rx_indicate = rx_ind;
 
-
+    return BS_EOK;
+}
 
 
 

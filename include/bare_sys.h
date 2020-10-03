@@ -35,7 +35,9 @@ bs_size_t bs_device_write(bs_device_t dev,
                           const void *buffer,
                           bs_size_t   size);
 bs_err_t bs_device_control(bs_device_t dev, int cmd, void *arg);
-
+bs_err_t
+bs_device_set_rx_indicate(bs_device_t dev,
+                          bs_err_t (*rx_ind)(bs_device_t dev, bs_size_t size));
 /*
  * kernel object interface
  */
