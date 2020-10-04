@@ -25,7 +25,8 @@ void soft_timer_main_loop(void)
     while (list != BS_NULL) { //下一个节点如果不为空
         if (list->loop_flag == BS_TRUE) {
             list->loop_flag = BS_FALSE;
-            list->callback_function();
+            if (list->callback_function)
+                list->callback_function(list->args);
             if (list->start_flag != BS_TRUE)
                 delete_node(list);   /* 如果定时器被删除就删除节点 */
         }
@@ -43,7 +44,11 @@ void soft_timer_main_loop(void)
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-void creat_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long duration, void(*timeout_handler)(void))
+void creat_single_soft_timer(SoftTimer *p,
+                             TimerRunModeType mode,
+                             unsigned long duration,
+                             void(*timeout_handler)(void *args),
+                             void *args)
 {
     BS_ASSERT(p != BS_NULL);
     BS_ASSERT(timeout_handler != BS_NULL);
@@ -58,6 +63,7 @@ void creat_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long 
     else
         p->run_mode = RUN_IN_INTERRUPT_MODE;
     p->callback_function = timeout_handler;
+    p->args = args;
     p->timing_mode = ONCE_MODE;
 
 #ifdef ENABLE_CUSTOM_RUN_NUM
@@ -75,7 +81,11 @@ void creat_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long 
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-void creat_continue_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long duration, void(*timeout_handler)(void))
+void creat_continue_soft_timer(SoftTimer *p,
+                               TimerRunModeType mode,
+                               unsigned long duration,
+                               void(*timeout_handler)(void *args),
+                               void *args)
 {
     BS_ASSERT(p != BS_NULL);
     BS_ASSERT(timeout_handler != BS_NULL);
@@ -90,6 +100,7 @@ void creat_continue_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned lon
     else
         p->run_mode = RUN_IN_INTERRUPT_MODE;
     p->callback_function = timeout_handler;
+    p->args = args;
     p->timing_mode = CONTINUE_MODE;
 
 #ifdef ENABLE_CUSTOM_RUN_NUM
@@ -111,7 +122,12 @@ void creat_continue_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned lon
  */
 
 #ifdef ENABLE_CUSTOM_RUN_NUM
-void creat_limit_num_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long run_num, unsigned long duration, void(*timeout_handler)(void))
+void creat_limit_num_soft_timer(SoftTimer *p,
+                                TimerRunModeType mode,
+                                unsigned long run_num,
+                                unsigned long duration,
+                                void(*timeout_handler)(void *args),
+                                void args)
 {
     BS_ASSERT(p != BS_NULL);
     BS_ASSERT(timeout_handler != BS_NULL);
@@ -126,6 +142,7 @@ void creat_limit_num_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned lo
     else
         p->run_mode = RUN_IN_INTERRUPT_MODE;
     p->callback_function = timeout_handler;
+    p->args = args;
     p->timing_mode = CUSTOM_NUM_MODE;
     p->run_num = run_num;       /* 只有在自定义运行次数的情况下此值才有效 */
     head_point = creat_node(p);
@@ -141,7 +158,11 @@ void creat_limit_num_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned lo
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-void restart_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long duration, void(*timeout_handler)(void))
+void restart_single_soft_timer(SoftTimer *p,
+                               TimerRunModeType mode,
+                               unsigned long duration,
+                               void(*timeout_handler)(void *args),
+                               void *args)
 {
     BS_ASSERT(p != BS_NULL);
     BS_ASSERT(timeout_handler != BS_NULL);
@@ -156,6 +177,7 @@ void restart_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned lon
     else
         p->run_mode = RUN_IN_INTERRUPT_MODE;
     p->callback_function = timeout_handler;
+    p->args = args;
     p->timing_mode = ONCE_MODE;
 
 #ifdef ENABLE_CUSTOM_RUN_NUM
@@ -272,7 +294,7 @@ static bs_bool_t is_node_already_creat(SoftTimer *node)
  * 比如此函数挂载在定时50ms的外部定时器上，那么定时dutation
  * 为20时定时时间就是20*50ms=1S
  */
-void timer_handler(void)
+void soft_timer_isr(void)
 {
     struct SoftTimer *list = head_point;
 
@@ -297,7 +319,8 @@ void timer_handler(void)
                     break;
                 }
                 if (list->run_mode == RUN_IN_INTERRUPT_MODE) {
-                    list->callback_function();   /* 中断内直接运行回调函数，用于实时性比较高的程序 */
+                    if (list->callback_function)
+                        list->callback_function(list->args);   /* 中断内直接运行回调函数，用于实时性比较高的程序 */
                     if (list->start_flag != BS_TRUE)
                         delete_node(list);
                 } else

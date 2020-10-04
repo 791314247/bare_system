@@ -20,7 +20,7 @@ void LPTIM_IRQHandler(void)
         (LL_LPTIM_IsActiveFlag_CounterOver(LPTIM) == SET)) {
         LL_LPTIM_ClearFlag_CounterOver(LPTIM);
 
-        timer_handler();
+        soft_timer_isr();
     }
 
     /* leave interrupt */

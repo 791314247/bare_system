@@ -15,7 +15,7 @@
 
 #include <bsconfig.h>
 #include <bsdef.h>
-
+#include <timer.h>
 
 /*
  * device (I/O) system interface

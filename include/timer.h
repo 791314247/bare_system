@@ -21,7 +21,7 @@
  */
 #define TIMER_TICK_PER_SECOND                10U    //每秒tick数(t=us)
 #if (TIMER_TICK_PER_SECOND >= 10)
-#define TIMER_100MS_DELAY                    (TIMER_TICK_PER_SECOND/10)
+    #define TIMER_100MS_DELAY                    (TIMER_TICK_PER_SECOND/10)
 #endif
 #define TIMER_SEC_DELAY                      TIMER_TICK_PER_SECOND
 
@@ -64,15 +64,11 @@ typedef struct SoftTimer {
     volatile bs_bool_t loop_flag;                       /* 轮询标志          */
     TimerRunModeType run_mode;
     TimerTimingModeType timing_mode;
-    void (*callback_function)(void);      /* 回调函数          */
+    void (*callback_function)(void *args);     /* 回调函数          */
+    void *args;
     struct SoftTimer *next;
 } SoftTimer;
 
-
-/*
- * 初始化软件定时器的硬件tick
- */
-extern void timer_handler(void);
 
 /*
  * 创建一个只运行一次的软件定时器并立刻开始计时
@@ -82,7 +78,11 @@ extern void timer_handler(void);
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-extern void creat_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long duration, void(*timeout_handler)(void));
+void creat_single_soft_timer(SoftTimer *p,
+                             TimerRunModeType mode,
+                             unsigned long duration,
+                             void(*timeout_handler)(void *args),
+                             void *args);
 
 /*
  * 创建永远运行的软件定时器并立刻开始计时
@@ -92,7 +92,11 @@ extern void creat_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigne
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-extern void creat_continue_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long duration, void(*timeout_handler)(void));
+void creat_continue_soft_timer(SoftTimer *p,
+                               TimerRunModeType mode,
+                               unsigned long duration,
+                               void(*timeout_handler)(void *args),
+                               void *args);
 
 /*
  * 创建指定次数运行的软件定时器并立刻开始计时
@@ -103,8 +107,14 @@ extern void creat_continue_soft_timer(SoftTimer *p, TimerRunModeType mode, unsig
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-extern void creat_limit_num_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long run_num, unsigned long duration, void(*timeout_handler)(void));
-
+#ifdef ENABLE_CUSTOM_RUN_NUM
+void creat_limit_num_soft_timer(SoftTimer *p,
+                                TimerRunModeType mode,
+                                unsigned long run_num,
+                                unsigned long duration,
+                                void(*timeout_handler)(void *args),
+                                void args);
+#endif
 
 /*
  * 重启指定的单次软件定时器
@@ -114,9 +124,11 @@ extern void creat_limit_num_soft_timer(SoftTimer *p, TimerRunModeType mode, unsi
  *        timeout_handler: 定时到了之后要执行的函数指针
  * return：无
  */
-extern void restart_single_soft_timer(SoftTimer *p, TimerRunModeType mode, unsigned long duration, void(*timeout_handler)(void));
-
-
+void restart_single_soft_timer(SoftTimer *p,
+                               TimerRunModeType mode,
+                               unsigned long duration,
+                               void(*timeout_handler)(void *args),
+                               void *args);
 
 /*
  * 重设指定定时器的计数值
@@ -130,13 +142,13 @@ void soft_timer_reset_interval(SoftTimer *p, unsigned long duration);
 /**
  * 删除一个软件定时器
  */
-extern void stop_timer(SoftTimer *p);
+void stop_timer(SoftTimer *p);
 
 
 /**
  * 系统main循环进程，用于执行轮询模式的回调函数
  */
-extern void soft_timer_main_loop(void);
+void soft_timer_main_loop(void);
 
 
 /**
@@ -145,7 +157,7 @@ extern void soft_timer_main_loop(void);
  * 比如此函数挂载在定时50ms的外部定时器上，那么定时dutation
  * 为20时定时时间就是20*50ms=1S
  */
-extern void system_tick_IrqHandler(void);
+void soft_timer_isr(void);
 
 
 

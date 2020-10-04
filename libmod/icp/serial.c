@@ -10,7 +10,7 @@
 
 #include <serial.h>
 
-//static struct bs_serial_device _hw_serial;
+static SoftTimer serial_rx_timer;
 
 /*
  * This function initializes serial device.
@@ -67,9 +67,37 @@ static bs_err_t bs_serial_control(struct bs_device *dev,
     return BS_EOK;
 }
 
-
-const static struct bs_device_ops serial_ops = 
+static void serial_rx_timeout(void * args)
 {
+    struct bs_serial_device *serial;
+    serial = (struct bs_serial_device *)args;
+    BS_ASSERT(serial != BS_NULL);
+
+    if(serial->parent.rx_indicate)
+        serial->parent.rx_indicate((bs_device_t)serial, serial->rx_index);
+    serial->rx_index = 0;
+}
+
+/* ISR for serial interrupt */
+void bs_hw_serial_isr(struct bs_serial_device *serial, int event)
+{
+    BS_ASSERT(serial != BS_NULL);
+    switch (event & 0xff) {
+    case BS_SERIAL_EVENT_RX_IND: {
+        /* interrupt mode receive */
+        if (serial->rx_index <= serial->config.bufsz)
+            serial->serial_rx[serial->rx_index++] = serial->ops->getc(serial);
+        creat_single_soft_timer(&serial_rx_timer, RUN_IN_LOOP_MODE,
+                                TIMER_100MS_DELAY, serial_rx_timeout, (void*)serial);
+    }
+    //case BS_SERIAL_EVENT_TX_DONE:
+
+    }
+
+}
+
+
+const static struct bs_device_ops serial_ops = {
     bs_serial_init,
     bs_serial_open,
     bs_serial_close,

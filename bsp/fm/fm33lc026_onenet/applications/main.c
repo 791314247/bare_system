@@ -35,7 +35,7 @@ void DelayMs(uint32_t count)
 }
 
 
-static void led1_timeout(void)
+static void led1_timeout(void* args)
 {
     if (bs_pin_read(LED1_PIN) == PIN_HIGH)
         bs_pin_write(LED1_PIN, PIN_LOW);
@@ -43,7 +43,7 @@ static void led1_timeout(void)
         bs_pin_write(LED1_PIN, PIN_HIGH);
 }
 
-static void led2_timeout(void)
+static void led2_timeout(void* args)
 {
     if (bs_pin_read(LED2_PIN) == PIN_HIGH)
         bs_pin_write(LED2_PIN, PIN_LOW);
@@ -51,7 +51,7 @@ static void led2_timeout(void)
         bs_pin_write(LED2_PIN, PIN_HIGH);
 }
 
-static void led3_timeout(void)
+static void led3_timeout(void* args)
 {
     if (bs_pin_read(LED3_PIN) == PIN_HIGH)
         bs_pin_write(LED3_PIN, PIN_LOW);
@@ -59,7 +59,7 @@ static void led3_timeout(void)
         bs_pin_write(LED3_PIN, PIN_HIGH);
 }
 
-static void led4_timeout(void)
+static void led4_timeout(void* args)
 {
     if (bs_pin_read(LED4_PIN) == PIN_HIGH)
         bs_pin_write(LED4_PIN, PIN_LOW);
@@ -79,13 +79,13 @@ int main(void)
     bs_pin_mode(LED4_PIN, PIN_MODE_OUTPUT);
 
     creat_continue_soft_timer(&led1, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 2, led1_timeout);
+                              TIMER_100MS_DELAY * 2, led1_timeout, BS_NULL);
     creat_continue_soft_timer(&led2, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 3, led2_timeout);
+                              TIMER_100MS_DELAY * 3, led2_timeout, BS_NULL);
     creat_continue_soft_timer(&led3, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 4, led3_timeout);
+                              TIMER_100MS_DELAY * 4, led3_timeout, BS_NULL);
     creat_continue_soft_timer(&led4, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 5, led4_timeout);
+                              TIMER_100MS_DELAY * 5, led4_timeout, BS_NULL);
 
     temp = bs_device_find("uart1");
     if (temp == BS_NULL) {

@@ -10,6 +10,35 @@
 #include <board.h>
 #include <drv_uart.h>
 
+#ifdef BSP_USING_UART0
+    char uart0_rxbuf[BS_UART0_BUFSZ];
+    char uart0_txbuf[BS_UART0_BUFSZ];
+#endif
+#ifdef BSP_USING_UART1
+    char uart1_rxbuf[BS_UART1_BUFSZ];
+    char uart1_txbuf[BS_UART1_BUFSZ];
+#endif
+#ifdef BSP_USING_UART2
+    char uart2_rxbuf[BS_UART2_BUFSZ];
+    char uart2_txbuf[BS_UART2_BUFSZ];
+#endif
+#ifdef BSP_USING_UART3
+    char uart3_rxbuf[BS_UART3_BUFSZ];
+    char uart3_txbuf[BS_UART3_BUFSZ];
+#endif
+#ifdef BSP_USING_UART4
+    char uart4_rxbuf[BS_UART4_BUFSZ];
+    char uart4_txbuf[BS_UART4_BUFSZ];
+#endif
+#ifdef BSP_USING_UART5
+    char uart5_rxbuf[BS_UART5_BUFSZ];
+    char uart5_txbuf[BS_UART5_BUFSZ];
+#endif
+#ifdef BSP_USING_LPUART1
+    char lpuart1_rxbuf[BS_LPUART1_BUFSZ];
+    char lpuart1_txbuf[BS_LPUART1_BUFSZ];
+#endif
+
 enum {
 #ifdef BSP_USING_UART0
     UART0_INDEX,
@@ -201,14 +230,13 @@ static bs_err_t fm_control(struct bs_serial_device *serial, int cmd, void *arg)
 static int fm_putc(struct bs_serial_device *serial, char c)
 {
     struct fm_uart_config *uartx = BS_NULL;
-    bs_base_t level;
     BS_ASSERT(serial != BS_NULL);
 
     uartx = (struct fm_uart_config *)serial->parent.user_data;
 
-    level = bs_hw_interrupt_disable();
+    bs_hw_interrupt_disable();
     LL_UART_TransmitData(uartx->Instance, c);
-    bs_hw_interrupt_enable(level);
+    bs_hw_interrupt_enable();
 
     while (SET != LL_UART_IsActiveFlag_TXSE(uartx->Instance));
 
@@ -288,33 +316,165 @@ static const struct bs_uart_ops fm_uart_ops = {
 
 int bs_hw_usart_init(void)
 {
-    bs_size_t obj_num = sizeof(uart_obj) / sizeof(struct fm_uart_class);
     bs_err_t result = 0;
 
     GPIO_Configuration();
 
-    for (int i = 0; i < obj_num; i++) {
+#ifdef BSP_USING_UART0
         /* init UART object */
-        uart_obj[i].config = &uart_config[i];
-        uart_obj[i].serial.ops = &fm_uart_ops;
-        uart_obj[i].serial.config.baud_rate = serial_default_config[i].baud_rate;
-        uart_obj[i].serial.config.data_bits = serial_default_config[i].data_bits;
-        uart_obj[i].serial.config.stop_bits = serial_default_config[i].stop_bits;
-        uart_obj[i].serial.config.parity = serial_default_config[i].parity;
-        uart_obj[i].serial.config.bit_order = serial_default_config[i].bit_order;
-        uart_obj[i].serial.config.invert = serial_default_config[i].invert;
-        uart_obj[i].serial.config.bufsz = serial_default_config[i].bufsz;
-        uart_obj[i].serial.config.reserved = serial_default_config[i].reserved;
-
+        uart_obj[0].config = &uart_config[0];
+        uart_obj[0].serial.ops = &fm_uart_ops;
+        uart_obj[0].serial.config.baud_rate = serial_default_config[0].baud_rate;
+        uart_obj[0].serial.config.data_bits = serial_default_config[0].data_bits;
+        uart_obj[0].serial.config.stop_bits = serial_default_config[0].stop_bits;
+        uart_obj[0].serial.config.parity = serial_default_config[0].parity;
+        uart_obj[0].serial.config.bit_order = serial_default_config[0].bit_order;
+        uart_obj[0].serial.config.invert = serial_default_config[0].invert;
+        uart_obj[0].serial.config.bufsz = serial_default_config[0].bufsz;
+        uart_obj[0].serial.config.reserved = serial_default_config[0].reserved;
+        uart_obj[0].serial.serial_rx = uart0_rxbuf;
+        uart_obj[0].serial.serial_rx = uart0_txbuf;
         /* register UART device */
-        result = bs_hw_serial_register(&uart_obj[i].serial, uart_obj[i].config->name,
+        result = bs_hw_serial_register(&uart_obj[0].serial, uart_obj[0].config->name,
                                        BS_DEVICE_FLAG_RDWR
                                        | BS_DEVICE_FLAG_INT_RX
                                        | BS_DEVICE_FLAG_INT_TX
-                                       , &uart_config[i]);
+                                       , &uart_config[0]);
         BS_ASSERT(result == BS_EOK);
-    }
-
+#endif
+#ifdef BSP_USING_UART1
+        /* init UART object */
+        uart_obj[1].config = &uart_config[i];
+        uart_obj[1].serial.ops = &fm_uart_ops;
+        uart_obj[1].serial.config.baud_rate = serial_default_config[1].baud_rate;
+        uart_obj[1].serial.config.data_bits = serial_default_config[1].data_bits;
+        uart_obj[1].serial.config.stop_bits = serial_default_config[1].stop_bits;
+        uart_obj[1].serial.config.parity = serial_default_config[1].parity;
+        uart_obj[1].serial.config.bit_order = serial_default_config[1].bit_order;
+        uart_obj[1].serial.config.invert = serial_default_config[1].invert;
+        uart_obj[1].serial.config.bufsz = serial_default_config[1].bufsz;
+        uart_obj[1].serial.config.reserved = serial_default_config[1].reserved;
+        uart_obj[1].serial.serial_rx = uart1_rxbuf;
+        uart_obj[1].serial.serial_rx = uart1_txbuf;
+        /* register UART device */
+        result = bs_hw_serial_register(&uart_obj[1].serial, uart_obj[1].config->name,
+                                       BS_DEVICE_FLAG_RDWR
+                                       | BS_DEVICE_FLAG_INT_RX
+                                       | BS_DEVICE_FLAG_INT_TX
+                                       , &uart_config[1]);
+        BS_ASSERT(result == BS_EOK);
+#endif
+#ifdef BSP_USING_UART2
+        /* init UART object */
+        uart_obj[2].config = &uart_config[i];
+        uart_obj[2].serial.ops = &fm_uart_ops;
+        uart_obj[2].serial.config.baud_rate = serial_default_config[2].baud_rate;
+        uart_obj[2].serial.config.data_bits = serial_default_config[2].data_bits;
+        uart_obj[2].serial.config.stop_bits = serial_default_config[2].stop_bits;
+        uart_obj[2].serial.config.parity = serial_default_config[2].parity;
+        uart_obj[2].serial.config.bit_order = serial_default_config[2].bit_order;
+        uart_obj[2].serial.config.invert = serial_default_config[2].invert;
+        uart_obj[2].serial.config.bufsz = serial_default_config[2].bufsz;
+        uart_obj[2].serial.config.reserved = serial_default_config[2].reserved;
+        uart_obj[2].serial.serial_rx = uart2_rxbuf;
+        uart_obj[2].serial.serial_rx = uart2_txbuf;
+        /* register UART device */
+        result = bs_hw_serial_register(&uart_obj[2].serial, uart_obj[2].config->name,
+                                       BS_DEVICE_FLAG_RDWR
+                                       | BS_DEVICE_FLAG_INT_RX
+                                       | BS_DEVICE_FLAG_INT_TX
+                                       , &uart_config[2]);
+        BS_ASSERT(result == BS_EOK);
+#endif
+#ifdef BSP_USING_UART3
+        uart_obj[i].serial.serial_rx = uart3_rxbuf;
+        /* init UART object */
+        uart_obj[3].config = &uart_config[i];
+        uart_obj[3].serial.ops = &fm_uart_ops;
+        uart_obj[3].serial.config.baud_rate = serial_default_config[3].baud_rate;
+        uart_obj[3].serial.config.data_bits = serial_default_config[3].data_bits;
+        uart_obj[3].serial.config.stop_bits = serial_default_config[3].stop_bits;
+        uart_obj[3].serial.config.parity = serial_default_config[3].parity;
+        uart_obj[3].serial.config.bit_order = serial_default_config[3].bit_order;
+        uart_obj[3].serial.config.invert = serial_default_config[3].invert;
+        uart_obj[3].serial.config.bufsz = serial_default_config[3].bufsz;
+        uart_obj[3].serial.config.reserved = serial_default_config[3].reserved;
+        uart_obj[3].serial.serial_rx = uart3_rxbuf;
+        uart_obj[3].serial.serial_rx = uart3_txbuf;
+        /* register UART device */
+        result = bs_hw_serial_register(&uart_obj[3].serial, uart_obj[3].config->name,
+                                       BS_DEVICE_FLAG_RDWR
+                                       | BS_DEVICE_FLAG_INT_RX
+                                       | BS_DEVICE_FLAG_INT_TX
+                                       , &uart_config[3]);
+        BS_ASSERT(result == BS_EOK);
+#endif
+#ifdef BSP_USING_UART4
+        /* init UART object */
+        uart_obj[4].config = &uart_config[i];
+        uart_obj[4].serial.ops = &fm_uart_ops;
+        uart_obj[4].serial.config.baud_rate = serial_default_config[4].baud_rate;
+        uart_obj[4].serial.config.data_bits = serial_default_config[4].data_bits;
+        uart_obj[4].serial.config.stop_bits = serial_default_config[4].stop_bits;
+        uart_obj[4].serial.config.parity = serial_default_config[4].parity;
+        uart_obj[4].serial.config.bit_order = serial_default_config[4].bit_order;
+        uart_obj[4].serial.config.invert = serial_default_config[4].invert;
+        uart_obj[4].serial.config.bufsz = serial_default_config[4].bufsz;
+        uart_obj[4].serial.config.reserved = serial_default_config[4].reserved;
+        uart_obj[4].serial.serial_rx = uart4_rxbuf;
+        uart_obj[4].serial.serial_rx = uart4_txbuf;
+        /* register UART device */
+        result = bs_hw_serial_register(&uart_obj[4].serial, uart_obj[4].config->name,
+                                       BS_DEVICE_FLAG_RDWR
+                                       | BS_DEVICE_FLAG_INT_RX
+                                       | BS_DEVICE_FLAG_INT_TX
+                                       , &uart_config[4]);
+        BS_ASSERT(result == BS_EOK);
+#endif
+#ifdef BSP_USING_UART5
+       /* init UART object */
+        uart_obj[5].config = &uart_config[i];
+        uart_obj[5].serial.ops = &fm_uart_ops;
+        uart_obj[5].serial.config.baud_rate = serial_default_config[5].baud_rate;
+        uart_obj[5].serial.config.data_bits = serial_default_config[5].data_bits;
+        uart_obj[5].serial.config.stop_bits = serial_default_config[5].stop_bits;
+        uart_obj[5].serial.config.parity = serial_default_config[5].parity;
+        uart_obj[5].serial.config.bit_order = serial_default_config[5].bit_order;
+        uart_obj[5].serial.config.invert = serial_default_config[5].invert;
+        uart_obj[5].serial.config.bufsz = serial_default_config[5].bufsz;
+        uart_obj[5].serial.config.reserved = serial_default_config[5].reserved;
+        uart_obj[5].serial.serial_rx = uart5_rxbuf;
+        uart_obj[5].serial.serial_rx = uart5_txbuf;
+        /* register UART device */
+        result = bs_hw_serial_register(&uart_obj[5].serial, uart_obj[5].config->name,
+                                       BS_DEVICE_FLAG_RDWR
+                                       | BS_DEVICE_FLAG_INT_RX
+                                       | BS_DEVICE_FLAG_INT_TX
+                                       , &uart_config[5]);
+        BS_ASSERT(result == BS_EOK);
+#endif
+#ifdef BSP_USING_LPUART1
+        /* init UART object */
+        uart_obj[6].config = &uart_config[i];
+        uart_obj[6].serial.ops = &fm_uart_ops;
+        uart_obj[6].serial.config.baud_rate = serial_default_config[6].baud_rate;
+        uart_obj[6].serial.config.data_bits = serial_default_config[6].data_bits;
+        uart_obj[6].serial.config.stop_bits = serial_default_config[6].stop_bits;
+        uart_obj[6].serial.config.parity = serial_default_config[6].parity;
+        uart_obj[6].serial.config.bit_order = serial_default_config[6].bit_order;
+        uart_obj[6].serial.config.invert = serial_default_config[6].invert;
+        uart_obj[6].serial.config.bufsz = serial_default_config[6].bufsz;
+        uart_obj[6].serial.config.reserved = serial_default_config[6].reserved;
+        uart_obj[6].serial.serial_rx = uart6_rxbuf;
+        uart_obj[6].serial.serial_rx = uart6_txbuf;
+        /* register UART device */
+        result = bs_hw_serial_register(&uart_obj[6].serial, uart_obj[6].config->name,
+                                       BS_DEVICE_FLAG_RDWR
+                                       | BS_DEVICE_FLAG_INT_RX
+                                       | BS_DEVICE_FLAG_INT_TX
+                                       , &uart_config[6]);
+        BS_ASSERT(result == BS_EOK);
+#endif
     return result;
 }
 

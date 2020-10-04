@@ -50,29 +50,31 @@ extern "C" {
 #define NRZ_NORMAL                      0       /* Non Return to Zero : normal mode */
 #define NRZ_INVERTED                    1       /* Non Return to Zero : inverted mode */
 
-#define RT_SERIAL_RB_BUFSZ              64
+#ifndef BS_SERIAL_RB_BUFSZ
+#define BS_SERIAL_RB_BUFSZ              64
+#endif
 
-#define RT_SERIAL_EVENT_RX_IND          0x01    /* Rx indication */
-#define RT_SERIAL_EVENT_TX_DONE         0x02    /* Tx complete   */
-#define RT_SERIAL_EVENT_RX_DMADONE      0x03    /* Rx DMA transfer done */
-#define RT_SERIAL_EVENT_TX_DMADONE      0x04    /* Tx DMA transfer done */
-#define RT_SERIAL_EVENT_RX_TIMEOUT      0x05    /* Rx timeout    */
+#define BS_SERIAL_EVENT_RX_IND          0x01    /* Rx indication */
+#define BS_SERIAL_EVENT_TX_DONE         0x02    /* Tx complete   */
+#define BS_SERIAL_EVENT_RX_DMADONE      0x03    /* Rx DMA transfer done */
+#define BS_SERIAL_EVENT_TX_DMADONE      0x04    /* Tx DMA transfer done */
+#define BS_SERIAL_EVENT_RX_TIMEOUT      0x05    /* Rx timeout    */
 
-#define RT_SERIAL_DMA_RX                0x01
-#define RT_SERIAL_DMA_TX                0x02
+#define BS_SERIAL_DMA_RX                0x01
+#define BS_SERIAL_DMA_TX                0x02
 
-#define RT_SERIAL_RX_INT                0x01
-#define RT_SERIAL_TX_INT                0x02
+#define BS_SERIAL_RX_INT                0x01
+#define BS_SERIAL_TX_INT                0x02
 
-#define RT_SERIAL_ERR_OVERRUN           0x01
-#define RT_SERIAL_ERR_FRAMING           0x02
-#define RT_SERIAL_ERR_PARITY            0x03
+#define BS_SERIAL_ERR_OVERRUN           0x01
+#define BS_SERIAL_ERR_FRAMING           0x02
+#define BS_SERIAL_ERR_PARITY            0x03
 
-#define RT_SERIAL_TX_DATAQUEUE_SIZE     2048
-#define RT_SERIAL_TX_DATAQUEUE_LWM      30
+#define BS_SERIAL_TX_DATAQUEUE_SIZE     2048
+#define BS_SERIAL_TX_DATAQUEUE_LWM      30
 
 /* Default config for serial_configure structure */
-#define RT_SERIAL_CONFIG_DEFAULT           \
+#define BS_SERIAL_CONFIG_DEFAULT           \
 {                                          \
     BAUD_RATE_115200, /* 115200 bits/s */  \
     DATA_BITS_8,      /* 8 databits */     \
@@ -80,7 +82,7 @@ extern "C" {
     PARITY_NONE,      /* No parity  */     \
     BIT_ORDER_LSB,    /* LSB first sent */ \
     NRZ_NORMAL,       /* Normal mode */    \
-    RT_SERIAL_RB_BUFSZ, /* Buffer size */  \
+    BS_SERIAL_RB_BUFSZ, /* Buffer size */  \
     0                                      \
 }
 
@@ -105,8 +107,10 @@ struct bs_serial_device
     const struct bs_uart_ops *ops;
     struct serial_configure   config;
 
-    void *serial_rx;
-    void *serial_tx;
+    char *serial_rx;
+    char *serial_tx;
+    bs_uint16_t rx_index;
+    bs_uint16_t tx_index;
 };
 typedef struct bs_serial_device bs_serial_t;
 
