@@ -227,7 +227,7 @@ static struct SoftTimer *creat_node(SoftTimer *node)
         return head_point;
 
     if (is_node_already_creat(node) != BS_FALSE) {
-        delete_node(node);  /* 当节点已经存在的时候在这里选择退出还是删除后重新创建，目前重新创建 */
+        return BS_NULL;  /* 当节点已经存在的时候退出 */
     }
     //当头节点为空时，将传入的节点作为头节点，返回头节点
     if (head_point == BS_NULL)         {
