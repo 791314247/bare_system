@@ -16,6 +16,8 @@
 
 /************************** uart0 config **************************************/
 #if defined(BSP_USING_UART0)
+#define BS_UART0_RX_BUFSZ         128
+#define BS_UART0_TX_BUFSZ         1
 #ifndef UART0_CONFIG
 #define UART0_CONFIG                                                \
     {                                                               \
@@ -34,6 +36,7 @@
     PARITY_NONE,      /* No parity  */     \
     BIT_ORDER_LSB,    /* LSB first sent */ \
     NRZ_NORMAL,       /* Normal mode */    \
+    BS_UART0_RX_BUFSZ,  /* buf size */     \
     0                                      \
 }
 #endif /* BSP_USING_UART0 */

@@ -8,7 +8,7 @@
 
 
 #define BSP_USING_UART0
-#define BS_UART0_BUFSZ      128
+
 
 
 

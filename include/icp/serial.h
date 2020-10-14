@@ -86,6 +86,19 @@ extern "C" {
     0                                      \
 }
 
+/*
+ * Serial FIFO mode 
+ */
+struct bs_serial_rx_fifo
+{
+    /* software fifo */
+    bs_uint8_t *buffer;
+
+    bs_uint16_t put_index, get_index;
+
+    bs_bool_t is_full;
+};
+
 struct serial_configure
 {
     bs_uint32_t baud_rate;
@@ -94,7 +107,8 @@ struct serial_configure
     bs_uint32_t parity                  :2;
     bs_uint32_t bit_order               :1;
     bs_uint32_t invert                  :1;
-    bs_uint32_t reserved                :22;
+    bs_uint32_t bufsz                   :16;
+    bs_uint32_t reserved                :6;
 };
 
 /* serial device and operations for bs */

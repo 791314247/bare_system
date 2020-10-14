@@ -10,6 +10,9 @@
 
 #include <serial.h>
 
+static struct bs_serial_rx_fifo rx_fifo;
+
+
 bs_inline int _serial_int_tx(struct bs_serial_device *serial, const bs_uint8_t *data, int length)
 {
     return 0;
@@ -86,16 +89,26 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
     dev->open_flag = oflag & 0xff;
 
     /* initialize the Rx/Tx structure according to open flag */
-    if (oflag & BS_DEVICE_FLAG_INT_RX) {
-        dev->open_flag |= BS_DEVICE_FLAG_INT_RX;
-        /* configure low level device */
-        serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_RX);
+    if (rx_fifo.buffer != (bs_uint8_t *)serial->serial_rx) {
+        if (oflag & BS_DEVICE_FLAG_INT_RX) {
+            BS_ASSERT(serial->serial_rx != BS_NULL);
+            rx_fifo.buffer = (bs_uint8_t *)(serial->serial_rx);
+            bs_memset(rx_fifo.buffer, 0, serial->config.bufsz);
+            rx_fifo.put_index = 0;
+            rx_fifo.get_index = 0;
+            rx_fifo.is_full = BS_FALSE;
+            dev->open_flag |= BS_DEVICE_FLAG_INT_RX;
+            /* configure low level device */
+            serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_RX);
+        }
     }
+
     if (oflag & BS_DEVICE_FLAG_INT_TX) {
         dev->open_flag |= BS_DEVICE_FLAG_INT_TX;
         /* configure low level device */
         serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_TX);
     }
+
 
     /* set stream flag */
     dev->open_flag |= stream_flag;
@@ -104,9 +117,9 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
 
 static bs_err_t bs_serial_close(struct bs_device *dev)
 {
-    // struct rt_serial_device *serial;
+    // struct bs_serial_device *serial;
     // BS_ASSERT(dev != BS_NULL);
-    // serial = (struct rt_serial_device *)dev;
+    // serial = (struct bs_serial_device *)dev;
 
     /* this device has more reference count */
     if (dev->ref_count > 1) return BS_EOK;
@@ -159,14 +172,42 @@ void bs_hw_serial_isr(struct bs_serial_device *serial, int event)
     BS_ASSERT(serial != BS_NULL);
     switch (event & 0xff) {
     case BS_SERIAL_EVENT_RX_IND: {
+        int ch = -1;
         /* interrupt mode receive */
+        while (1) {
+            ch = serial->ops->getc(serial);
+            if (ch == -1) break;
+
+            rx_fifo.buffer[rx_fifo.put_index] = ch;
+            rx_fifo.put_index += 1;
+            if (rx_fifo.put_index >= serial->config.bufsz) rx_fifo.put_index = 0;
+
+            /* if the next position is read index, discard this 'read char' */
+            if (rx_fifo.put_index == rx_fifo.get_index) {
+                rx_fifo.get_index += 1;
+                rx_fifo.is_full = BS_TRUE;
+                if (rx_fifo.get_index >= serial->config.bufsz) rx_fifo.get_index = 0;
+                kprintf("Warning: There is no enough buffer for saving data,"
+                        " please increase the BS_UARTx_BUFSZ option.");
+            }
+
+            /* invoke callback */
+            if (serial->parent.rx_indicate != BS_NULL) {
+                bs_size_t rx_length;
+
+                /* get rx length */
+                rx_length = (rx_fifo.put_index >= rx_fifo.get_index) ? (rx_fifo.put_index - rx_fifo.get_index) :
+                            (serial->config.bufsz - (rx_fifo.get_index - rx_fifo.put_index));
+
+                if (rx_length) {
+                    serial->parent.rx_indicate(&serial->parent, rx_length);
+                }
+            }
+        }
     }
     case BS_SERIAL_EVENT_TX_DONE: {
-
     }
-
     }
-
 }
 
 
