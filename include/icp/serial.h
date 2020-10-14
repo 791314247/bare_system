@@ -89,14 +89,12 @@ extern "C" {
 struct serial_configure
 {
     bs_uint32_t baud_rate;
-
     bs_uint32_t data_bits               :4;
     bs_uint32_t stop_bits               :2;
     bs_uint32_t parity                  :2;
     bs_uint32_t bit_order               :1;
     bs_uint32_t invert                  :1;
-    bs_uint32_t bufsz                   :16;
-    bs_uint32_t reserved                :6;
+    bs_uint32_t reserved                :22;
 };
 
 /* serial device and operations for bs */
@@ -109,8 +107,6 @@ struct bs_serial_device
 
     char *serial_rx;
     char *serial_tx;
-    bs_uint16_t rx_index;
-    bs_uint16_t tx_index;
 };
 typedef struct bs_serial_device bs_serial_t;
 

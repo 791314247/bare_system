@@ -10,7 +10,31 @@
 
 #include <serial.h>
 
-static SoftTimer serial_rx_timer;
+bs_inline int _serial_int_tx(struct bs_serial_device *serial, const bs_uint8_t *data, int length)
+{
+    return 0;
+}
+
+bs_inline int _serial_poll_tx(struct bs_serial_device *serial, const bs_uint8_t *data, int length)
+{
+    int size;
+    BS_ASSERT(serial != BS_NULL);
+
+    size = length;
+    while (length) {
+        /*
+         * to be polite with serial console add a line feed
+         * to the carriage return character
+         */
+        if (*data == '\n' && (serial->parent.open_flag & BS_DEVICE_FLAG_STREAM)) {
+            serial->ops->putc(serial, '\r');
+        }
+        serial->ops->putc(serial, *data);
+        ++ data;
+        -- length;
+    }
+    return size - length;
+}
 
 /*
  * This function initializes serial device.
@@ -24,8 +48,8 @@ static bs_err_t bs_serial_init(struct bs_device *dev)
     serial = (struct bs_serial_device *)dev;
 
     /* initialize rx/tx */
-    serial->rx_index = 0;
-    serial->tx_index = 0;
+    serial->serial_rx = BS_NULL;
+    serial->serial_tx = BS_NULL;
 
     /* apply configuration */
     if (serial->ops->configure)
@@ -63,13 +87,14 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
 
     /* initialize the Rx/Tx structure according to open flag */
     if (oflag & BS_DEVICE_FLAG_INT_RX) {
-        bs_memset(serial->serial_rx, 0, serial->config.bufsz);
-        bs_memset(serial->serial_tx, 0, serial->config.bufsz);
-        serial->rx_index = 0;
-        serial->tx_index = 0;
         dev->open_flag |= BS_DEVICE_FLAG_INT_RX;
         /* configure low level device */
         serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_RX);
+    }
+    if (oflag & BS_DEVICE_FLAG_INT_TX) {
+        dev->open_flag |= BS_DEVICE_FLAG_INT_TX;
+        /* configure low level device */
+        serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_TX);
     }
 
     /* set stream flag */
@@ -79,77 +104,17 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
 
 static bs_err_t bs_serial_close(struct bs_device *dev)
 {
-    struct rt_serial_device *serial;
-    RT_ASSERT(dev != RT_NULL);
-    serial = (struct rt_serial_device *)dev;
+    // struct rt_serial_device *serial;
+    // BS_ASSERT(dev != BS_NULL);
+    // serial = (struct rt_serial_device *)dev;
 
     /* this device has more reference count */
-    if (dev->ref_count > 1) return RT_EOK;
+    if (dev->ref_count > 1) return BS_EOK;
 
-    if (dev->open_flag & RT_DEVICE_FLAG_INT_RX)
-    {
-        struct rt_serial_rx_fifo* rx_fifo;
-
-        rx_fifo = (struct rt_serial_rx_fifo*)serial->serial_rx;
-        RT_ASSERT(rx_fifo != RT_NULL);
-
-        rt_free(rx_fifo);
-        serial->serial_rx = RT_NULL;
-        dev->open_flag &= ~RT_DEVICE_FLAG_INT_RX;
-        /* configure low level device */
-        serial->ops->control(serial, RT_DEVICE_CTRL_CLR_INT, (void*)RT_DEVICE_FLAG_INT_RX);
+    if (dev->open_flag & BS_DEVICE_FLAG_INT_RX) {
     }
-#ifdef RT_SERIAL_USING_DMA
-    else if (dev->open_flag & RT_DEVICE_FLAG_DMA_RX)
-    {
-        if (serial->config.bufsz == 0) {
-            struct rt_serial_rx_dma* rx_dma;
-
-            rx_dma = (struct rt_serial_rx_dma*)serial->serial_rx;
-            RT_ASSERT(rx_dma != RT_NULL);
-
-            rt_free(rx_dma);
-        } else {
-            struct rt_serial_rx_fifo* rx_fifo;
-
-            rx_fifo = (struct rt_serial_rx_fifo*)serial->serial_rx;
-            RT_ASSERT(rx_fifo != RT_NULL);
-
-            rt_free(rx_fifo);
-        }
-        /* configure low level device */
-        serial->ops->control(serial, RT_DEVICE_CTRL_CLR_INT, (void *) RT_DEVICE_FLAG_DMA_RX);
-        serial->serial_rx = RT_NULL;
-        dev->open_flag &= ~RT_DEVICE_FLAG_DMA_RX;
+    if (dev->open_flag & BS_DEVICE_FLAG_INT_TX) {
     }
-#endif /* RT_SERIAL_USING_DMA */
-    
-    if (dev->open_flag & RT_DEVICE_FLAG_INT_TX)
-    {
-        struct rt_serial_tx_fifo* tx_fifo;
-
-        tx_fifo = (struct rt_serial_tx_fifo*)serial->serial_tx;
-        RT_ASSERT(tx_fifo != RT_NULL);
-
-        rt_free(tx_fifo);
-        serial->serial_tx = RT_NULL;
-        dev->open_flag &= ~RT_DEVICE_FLAG_INT_TX;
-        /* configure low level device */
-        serial->ops->control(serial, RT_DEVICE_CTRL_CLR_INT, (void*)RT_DEVICE_FLAG_INT_TX);
-    }
-#ifdef RT_SERIAL_USING_DMA
-    else if (dev->open_flag & RT_DEVICE_FLAG_DMA_TX)
-    {
-        struct rt_serial_tx_dma* tx_dma;
-
-        tx_dma = (struct rt_serial_tx_dma*)serial->serial_tx;
-        RT_ASSERT(tx_dma != RT_NULL);
-
-        rt_free(tx_dma);
-        serial->serial_tx = RT_NULL;
-        dev->open_flag &= ~RT_DEVICE_FLAG_DMA_TX;
-    }
-#endif /* RT_SERIAL_USING_DMA */
     return BS_EOK;
 }
 
@@ -166,7 +131,18 @@ static bs_size_t bs_serial_write(struct bs_device *dev,
                                  const void       *buffer,
                                  bs_size_t         size)
 {
-    return BS_EOK;
+    struct bs_serial_device *serial;
+
+    BS_ASSERT(dev != BS_NULL);
+    if (size == 0) return 0;
+
+    serial = (struct bs_serial_device *)dev;
+
+    if (dev->open_flag & BS_DEVICE_FLAG_INT_TX) {
+        return _serial_int_tx(serial, (const bs_uint8_t *)buffer, size);
+    } else {
+        return _serial_poll_tx(serial, (const bs_uint8_t *)buffer, size);
+    }
 }
 
 static bs_err_t bs_serial_control(struct bs_device *dev,
@@ -176,16 +152,6 @@ static bs_err_t bs_serial_control(struct bs_device *dev,
     return BS_EOK;
 }
 
-static void serial_rx_timeout(void *args)
-{
-    struct bs_serial_device *serial;
-    serial = (struct bs_serial_device *)args;
-    BS_ASSERT(serial != BS_NULL);
-
-    if (serial->parent.rx_indicate)
-        serial->parent.rx_indicate((bs_device_t)serial, serial->rx_index);
-    serial->rx_index = 0;
-}
 
 /* ISR for serial interrupt */
 void bs_hw_serial_isr(struct bs_serial_device *serial, int event)
@@ -194,10 +160,6 @@ void bs_hw_serial_isr(struct bs_serial_device *serial, int event)
     switch (event & 0xff) {
     case BS_SERIAL_EVENT_RX_IND: {
         /* interrupt mode receive */
-        if (serial->rx_index <= serial->config.bufsz)
-            serial->serial_rx[serial->rx_index++] = serial->ops->getc(serial);
-        creat_single_soft_timer(&serial_rx_timer, RUN_IN_LOOP_MODE,
-                                TIMER_100MS_DELAY, serial_rx_timeout, (void *)serial);
     }
     case BS_SERIAL_EVENT_TX_DONE: {
 
