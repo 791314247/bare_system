@@ -180,6 +180,10 @@ static bs_err_t fm_control(struct bs_serial_device *serial, int cmd, void *arg)
     uart = (struct fm_uart_config *)serial->parent.user_data;
     BS_ASSERT(uart != BS_NULL);
 
+	NVIC_DisableIRQ(uart->irq_type);
+	NVIC_SetPriority(uart->irq_type, 2);
+	NVIC_EnableIRQ(uart->irq_type);
+
     switch (cmd) {
     /* disable interrupt */
     case BS_DEVICE_CTRL_CLR_INT:
@@ -241,7 +245,10 @@ static int fm_getc(struct bs_serial_device *serial)
     uart = (struct fm_uart_config *)serial->parent.user_data;
     BS_ASSERT(uart != BS_NULL);
 
-    ch = LL_UART_ReceiveData(uart->Instance);
+    if(SET == LL_UART_IsActiveFlag_RXBF(uart->Instance))
+    {
+        ch = LL_UART_ReceiveData(uart->Instance);
+    }
 
     return ch;
 }

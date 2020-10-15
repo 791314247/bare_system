@@ -17,6 +17,17 @@
 #include <bsdef.h>
 #include <timer.h>
 
+
+bs_inline int bs_hw_interrupt_disable()
+{
+    return 0;
+}
+
+bs_inline int bs_hw_interrupt_enable()
+{
+    return 0;
+}
+
 /*
  * device (I/O) system interface
  */

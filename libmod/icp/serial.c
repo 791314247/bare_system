@@ -12,6 +12,74 @@
 
 static struct bs_serial_rx_fifo rx_fifo;
 
+/*
+ * Serial interrupt routines
+ */
+bs_inline int _serial_int_rx(struct bs_serial_device *serial, bs_uint8_t *data, int length)
+{
+    int size;
+
+    BS_ASSERT(serial != BS_NULL);
+    size = length;
+
+    /* read from software FIFO */
+    while (length) {
+        int ch;
+
+        /* disable interrupt */
+        bs_hw_interrupt_disable();
+
+        /* there's no data: */
+        if ((rx_fifo.get_index == rx_fifo.put_index) && (rx_fifo.is_full == BS_FALSE)) {
+            /* no data, enable interrupt and break out */
+            bs_hw_interrupt_enable();
+            break;
+        }
+
+        /* otherwise there's the data: */
+        ch = rx_fifo.buffer[rx_fifo.get_index];
+        rx_fifo.get_index += 1;
+        if (rx_fifo.get_index >= serial->config.bufsz) rx_fifo.get_index = 0;
+
+        if (rx_fifo.is_full == BS_TRUE) {
+            rx_fifo.is_full = BS_FALSE;
+        }
+
+        /* enable interrupt */
+        bs_hw_interrupt_enable();
+
+        *data = ch & 0xff;
+        data ++;
+        length --;
+    }
+
+    return size - length;
+}
+
+/*
+ * Serial poll routines
+ */
+bs_inline int _serial_poll_rx(struct bs_serial_device *serial, bs_uint8_t *data, int length)
+{
+    int ch;
+    int size;
+
+    BS_ASSERT(serial != BS_NULL);
+    size = length;
+
+    while (length) {
+        ch = serial->ops->getc(serial);
+        if (ch == -1) break;
+
+        *data = ch;
+        data ++;
+        length --;
+
+        if (ch == '\n') break;
+    }
+
+    return size - length;
+}
 
 bs_inline int _serial_int_tx(struct bs_serial_device *serial, const bs_uint8_t *data, int length)
 {
@@ -50,9 +118,9 @@ static bs_err_t bs_serial_init(struct bs_device *dev)
     BS_ASSERT(dev != BS_NULL);
     serial = (struct bs_serial_device *)dev;
 
-    /* initialize rx/tx */
-    serial->serial_rx = BS_NULL;
-    serial->serial_tx = BS_NULL;
+    /* check initialize rx/tx */
+    BS_ASSERT(serial->serial_rx != BS_NULL);
+    BS_ASSERT(serial->serial_tx != BS_NULL);
 
     /* apply configuration */
     if (serial->ops->configure)
@@ -136,7 +204,17 @@ static bs_size_t bs_serial_read(struct bs_device *dev,
                                 void             *buffer,
                                 bs_size_t         size)
 {
-    return BS_EOK;
+    struct bs_serial_device *serial;
+
+    BS_ASSERT(dev != BS_NULL);
+    if (size == 0) return 0;
+
+    serial = (struct bs_serial_device *)dev;
+
+    if (dev->open_flag & BS_DEVICE_FLAG_INT_RX) {
+        return _serial_int_rx(serial, (bs_uint8_t *)buffer, size);
+    }
+    return _serial_poll_rx(serial, (bs_uint8_t *)buffer, size);
 }
 
 static bs_size_t bs_serial_write(struct bs_device *dev,
