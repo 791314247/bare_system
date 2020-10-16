@@ -451,6 +451,11 @@
               <FileType>1</FileType>
               <FilePath>..\libraries\HAL_driver\drv_uart.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_wdt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\HAL_driver\drv_wdt.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
