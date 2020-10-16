@@ -10,23 +10,11 @@
 #ifndef __BARE_SYS_H_
 #define __BARE_SYS_H_
 
-#define BS_ASSERT(EX)
-#define kprintf(...)
-
 #include <bsconfig.h>
+#include <bsdebug.h>
 #include <bsdef.h>
 #include <timer.h>
 
-
-bs_inline int bs_hw_interrupt_disable()
-{
-    return 0;
-}
-
-bs_inline int bs_hw_interrupt_enable()
-{
-    return 0;
-}
 
 /*
  * device (I/O) system interface
@@ -74,7 +62,25 @@ void *bs_memmove(void *dest, const void *src, bs_ubase_t n);
 bs_int32_t bs_memcmp(const void *cs, const void *ct, bs_ubase_t count);
 bs_uint32_t bs_strcasecmp(const char *a, const char *b);
 
+#ifdef BS_DEBUG
+extern void (*bs_assert_hook)(const char *ex, const char *func, bs_size_t line);
+void bs_assert_set_hook(void (*hook)(const char *ex, const char *func, bs_size_t line));
+void bs_assert_handler(const char *ex, const char *func, bs_size_t line);
+void bs_kprintf(const char *fmt, ...);
+#else
+void bs_kprintf(...);
+#endif /* BS_DEBUG */
 
+
+bs_inline int bs_hw_interrupt_disable()
+{
+    return 0;
+}
+
+bs_inline int bs_hw_interrupt_enable()
+{
+    return 0;
+}
 
 
 

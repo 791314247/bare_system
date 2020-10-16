@@ -36,7 +36,7 @@ static struct bs_object *bs_object_find_node(struct bs_object *node)
  * @param l list to insert it
  * @param n new node to be inserted
  */
-static void rt_list_insert_after(struct bs_object *node)
+static void bs_list_insert_after(struct bs_object *node)
 {
     struct bs_object *list;   //list保存当前需要检查的节点的地址
     BS_ASSERT(node != BS_NULL)
@@ -66,7 +66,7 @@ static void rt_list_insert_after(struct bs_object *node)
 struct bs_object *bs_object_find_node_from_name(const char *name)
 {
     struct bs_object *list;
-    BS_ASSERT(node != BS_NULL)
+    BS_ASSERT(name != BS_NULL)
 
     list = head_point;
     while (list != BS_NULL) {
@@ -88,14 +88,20 @@ struct bs_object *bs_object_find_node_from_name(const char *name)
  */
 void bs_object_init(struct bs_object *object, const char *name)
 {
+    BS_ASSERT(object != BS_NULL);
+
     /* try to find object */
-    BS_ASSERT(node == bs_object_find_node(object));
+    if (BS_NULL != bs_object_find_node(object)) {
+        bs_kprintf("This node:%s already exists!\r\n", object->name);
+        BS_ASSERT(0);
+        return;
+    }
 
     /* initialize object's parameters */
     bs_strncpy(object->name, name, BS_NAME_MAX);
 
     /* insert object into information object list */
-    rt_list_insert_after(object);
+    bs_list_insert_after(object);
 }
 
 

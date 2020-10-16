@@ -42,7 +42,7 @@ static bs_err_t bs_watchdog_close(struct bs_device *dev)
 
     if (wtd->ops->control(wtd, BS_DEVICE_CTRL_WDT_STOP, BS_NULL) != BS_EOK)
     {
-        kprintf(" This watchdog can not be stoped\n");
+        bs_kprintf(" This watchdog can not be stoped\n");
 
         return (-BS_ERROR);
     }

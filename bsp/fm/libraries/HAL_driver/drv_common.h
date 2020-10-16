@@ -24,8 +24,6 @@ void _Error_Handler(char *s, int num);
 #endif
 
 
-
-
 #ifdef __cplusplus
 }
 #endif

@@ -43,7 +43,6 @@ int  bs_pin_read(bs_base_t pin)
 bs_err_t bs_pin_attach_irq(bs_int32_t pin, bs_uint32_t mode,
                            void (*hdr)(void *args), void *args)
 {
-    BS_ASSERT(_hw_pin.hdr != BS_NULL);
     BS_ASSERT(_hw_pin.pin_attach_irq != BS_NULL);
     if (_hw_pin.pin_attach_irq) {
         return _hw_pin.pin_attach_irq(pin, mode, hdr, args);
@@ -72,7 +71,7 @@ bs_err_t bs_pin_irq_enable(bs_base_t pin, bs_uint32_t enabled)
 void bs_device_pin_register(const struct bs_pin_ops *ops)
 {
     /* register a character device */
-    BS_ASSERT(ops != RT_NULL);
+    BS_ASSERT(ops != BS_NULL);
     _hw_pin.pin_mode = ops->pin_mode;
     _hw_pin.pin_read = ops->pin_read;
     _hw_pin.pin_write = ops->pin_write;

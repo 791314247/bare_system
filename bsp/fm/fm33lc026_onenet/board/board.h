@@ -11,6 +11,7 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
+#include <bare_sys.h>
 #include "main.h"
 #include "sleep.h"
 #include "drv_common.h"

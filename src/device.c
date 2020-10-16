@@ -47,8 +47,8 @@ bs_err_t bs_device_register(bs_device_t dev,
         return -BS_ERROR;
 
     if (bs_device_find(name) != BS_NULL) {
-        kprintf("To register device:%s failed, it was already registered !",
-                dev->name);
+        bs_kprintf("To register device:%s failed, it was already registered !",
+                dev->parent.name);
         return -BS_ERROR;
     }
 
@@ -78,7 +78,7 @@ bs_err_t bs_device_open(bs_device_t dev, bs_uint16_t oflag)
         if (device_init != BS_NULL) {
             result = device_init(dev);
             if (result != BS_EOK) {
-                kprintf("To initialize device:%s failed. The error code is %d\n",
+                bs_kprintf("To initialize device:%s failed. The error code is %d\n",
                         dev->parent.name, result);
                 return result;
             }
@@ -135,7 +135,7 @@ bs_err_t bs_device_close(bs_device_t dev)
 
     /* call device_close interface */
     if (device_close == BS_NULL) {
-        kprintf("To close device:%s failed, Function is empty !", dev->name);
+        bs_kprintf("To close device:%s failed, Function is empty !", dev->parent.name);
         return BS_EEMPTY;
     }
 
@@ -165,13 +165,13 @@ bs_size_t bs_device_read(bs_device_t dev,
     BS_ASSERT(buffer != BS_NULL);
 
     if (dev->ref_count == 0) {
-        kprintf("To read device:%s failed, It's not open !", dev->name);
+        bs_kprintf("To read device:%s failed, It's not open !", dev->parent.name);
         return BS_ERROR;
     }
 
     /* call device_read interface */
     if (device_read == BS_NULL) {
-        kprintf("To read device:%s failed, Function is empty !", dev->name);
+        bs_kprintf("To read device:%s failed, Function is empty !", dev->parent.name);
         return BS_EEMPTY;
     }
 
@@ -196,13 +196,13 @@ bs_size_t bs_device_write(bs_device_t dev,
     BS_ASSERT(buffer != BS_NULL);
 
     if (dev->ref_count == 0) {
-        kprintf("To write device:%s failed, It's not open !", dev->name);
+        bs_kprintf("To write device:%s failed, It's not open !", dev->parent.name);
         return 0;
     }
 
     /* call device_write interface */
     if (device_write == BS_NULL) {
-        kprintf("To write device:%s failed, Function is empty !", dev->name);
+        bs_kprintf("To write device:%s failed, Function is empty !", dev->parent.name);
         return BS_EEMPTY;
     }
 
