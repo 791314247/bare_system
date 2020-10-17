@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2006-2018, RT-Thread Development Team
+ * Copyright (c) 2006-2020
  *
  * SPDX-License-Identifier: Apache-2.0
  *
  * Change Logs:
  * Date           Author       Notes
- * 2018-11-27     balanceTWK   first version
+ * 2020-01-01     wr      first version
  */
 
 #include <bare_sys.h>
