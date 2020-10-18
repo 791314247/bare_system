@@ -10,7 +10,6 @@
 
 #include <bare_sys.h>
 #include <bsdevice.h>
-#include <board.h>
 
 
 
@@ -21,7 +20,8 @@ int main(void)
 
     wdt_dev = bs_device_find("wdt");
     if (wdt_dev == BS_NULL) {
-        Error_Handler();
+        bs_kprintf("find %s failed!\n", "wdt");
+        return (-BS_ERROR);
     }
     bs_device_open(wdt_dev, BS_DEVICE_FLAG_DEACTIVATE);
     bs_device_control(wdt_dev, BS_DEVICE_CTRL_WDT_START, BS_NULL);

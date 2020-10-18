@@ -25,7 +25,7 @@ static bs_err_t bs_watchdog_init(struct bs_device *dev)
         return (wtd->ops->init(wtd));
     }
 
-    return (-BS_ENOSYS);
+    return (BS_EOK);
 }
 
 static bs_err_t bs_watchdog_open(struct bs_device *dev, bs_uint16_t oflag)

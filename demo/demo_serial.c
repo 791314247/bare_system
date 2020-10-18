@@ -45,7 +45,8 @@ int serial_demo(void)
 {
     serial_dev = bs_device_find("uart0");
     if (serial_dev == BS_NULL) {
-        Error_Handler();
+        bs_kprintf("find %s failed!\n", "uart0");
+        return (-BS_ERROR);
     }
     bs_device_open(serial_dev, BS_DEVICE_FLAG_RDWR | BS_DEVICE_FLAG_INT_RX);
     /* 设置接收回调函数 */

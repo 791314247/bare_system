@@ -71,6 +71,6 @@ int bs_wdt_init(void)
     bs_kprintf("wdt device register success.");
     return BS_EOK;
 }
-INIT_BOARD_EXPORT(bs_wdt_init);
+INIT_DEVICE_EXPORT(bs_wdt_init);
 
 #endif /* RT_USING_WDT */
