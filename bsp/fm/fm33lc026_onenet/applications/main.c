@@ -23,9 +23,9 @@ int main(void)
         bs_kprintf("find %s failed!\n", "wdt");
         return (-BS_ERROR);
     }
-    bs_device_open(wdt_dev, BS_DEVICE_FLAG_DEACTIVATE);
+    bs_device_open(wdt_dev, BS_DEVICE_FLAG_DEACTIVATE);  
     bs_device_control(wdt_dev, BS_DEVICE_CTRL_WDT_START, BS_NULL);
-
+    bs_kprintf("Enter loop !");
     while (1) {
         soft_timer_main_loop();
         //DeepSleep();

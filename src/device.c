@@ -221,7 +221,6 @@ bs_size_t bs_device_write(bs_device_t dev,
 bs_err_t bs_device_control(bs_device_t dev, int cmd, void *arg)
 {
     BS_ASSERT(dev != BS_NULL);
-    BS_ASSERT(arg != BS_NULL);
 
     /* call device_write interface */
     if (device_control != BS_NULL) {

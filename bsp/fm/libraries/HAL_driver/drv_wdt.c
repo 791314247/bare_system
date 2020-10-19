@@ -22,8 +22,7 @@ static bs_err_t wdt_init(bs_watchdog_t *wdt)
     IWDT_InitStruct.IwdtWindows    = 0;
     /*最长溢出时间*/
     IWDT_InitStruct.OverflowPeriod = LL_IWDT_IWDT_OVERFLOW_PERIOD_1000MS;
-    LL_IWDT_Init(IWDT, &IWDT_InitStruct);
-    LL_IWDG_DisableStopCounterUnderSleep(IWDT);  /* default closed */
+    LL_IWDT_Init(IWDT, &IWDT_InitStruct);  /* 初始化之后自动运行，且无法关闭 */ 
     return BS_EOK;
 }
 
@@ -36,16 +35,18 @@ static bs_err_t wdt_control(bs_watchdog_t *wdt, int cmd, void *arg)
         break;
     /* set watchdog timeout */
     case BS_DEVICE_CTRL_WDT_SET_TIMEOUT:
+        LL_IWDG_ReloadCounter(IWDT);
         LL_IWDG_SetCounterPeriod(IWDT, (*((bs_uint32_t *)arg)));
         break;
     case BS_DEVICE_CTRL_WDT_GET_TIMEOUT:
         LL_IWDG_GetCounterPeriod(IWDT);
         break;
     case BS_DEVICE_CTRL_WDT_START:
-        LL_IWDG_EnableStopCounterUnderSleep(IWDT);
+        /* 初始化之后已经自动运行，且无法关闭 */
+        LL_IWDG_ReloadCounter(IWDT);
         break;
     case BS_DEVICE_CTRL_WDT_STOP:
-        LL_IWDG_DisableStopCounterUnderSleep(IWDT);
+        /* 初始化之后已经自动运行，且无法关闭 */
         break;
     default:
         bs_kprintf("This command is not supported.");
@@ -68,7 +69,6 @@ int bs_wdt_init(void)
         bs_kprintf("wdt device register failed.");
         return -BS_ERROR;
     }
-    bs_kprintf("wdt device register success.");
     return BS_EOK;
 }
 INIT_DEVICE_EXPORT(bs_wdt_init);

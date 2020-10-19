@@ -116,7 +116,7 @@ int at_base_init(void)
 {
     serial_dev = bs_device_find(AT_SERIAL);
     if (serial_dev == BS_NULL) {
-        bs_kprintf("find %s failed!\n", AT_SERIAL);
+        bs_kprintf("At base find %s failed!\n", AT_SERIAL);
         return (-BS_ERROR);
     }
     bs_device_open(serial_dev, BS_DEVICE_FLAG_RDWR | BS_DEVICE_FLAG_INT_RX);

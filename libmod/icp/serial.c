@@ -137,8 +137,8 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
     BS_ASSERT(dev != BS_NULL);
     serial = (struct bs_serial_device *)dev;
 
-    bs_kprintf("open serial device: 0x%08x with open flag: 0x%04x",
-            dev, oflag);
+    // bs_kprintf("open serial device: 0x%08x with open flag: 0x%04x",
+    //         dev, oflag);
     /* check device flag with the open flag */
     if ((oflag & BS_DEVICE_FLAG_DMA_RX) && !(dev->flag & BS_DEVICE_FLAG_DMA_RX))
         return -BS_EIO;
