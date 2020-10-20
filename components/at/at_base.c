@@ -116,9 +116,9 @@ void at_base_clean_recv(void)
 
 int at_base_init(void)
 {
-    serial_dev = bs_device_find(AT_SERIAL);
+    serial_dev = bs_device_find(BS_USING_AT_SERIAL);
     if (serial_dev == BS_NULL) {
-        bs_kprintf("At base find %s failed!\n", AT_SERIAL);
+        bs_kprintf("At base find %s failed!\n", BS_USING_AT_SERIAL);
         return (-BS_ERROR);
     }
     bs_device_open(serial_dev, BS_DEVICE_FLAG_RDWR | BS_DEVICE_FLAG_INT_RX);

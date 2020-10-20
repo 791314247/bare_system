@@ -13,9 +13,11 @@
 #include <bare_sys.h>
 #include <bsdevice.h>
 
-#define AT_SERIAL              "uart1"
+#ifndef BS_USING_AT_SERIAL
+#define BS_USING_AT_SERIAL          "uart1"
+#endif
 
-bs_err_t at_base_send_command(const char *command,
+bs_err_t at_base_send(const char *command,
                          const char *exec,
                          bs_uint8_t wait_time,
                          bs_uint8_t resend_num);

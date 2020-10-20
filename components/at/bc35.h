@@ -14,14 +14,12 @@
 #include <bsdevice.h>
 
 
-#define BC35_SERIAL              "uart1"
-
-#define BS_DEVICE_CTRL_BC35_BOOT          (1) /* get timeout(in seconds) */
-#define BS_DEVICE_CTRL_BC35_CLOSE         (2) /* set timeout(in seconds) */
-#define BS_DEVICE_CTRL_BC35_NET_INIT      (3) /* get the left time before reboot(in seconds) */
-#define BS_DEVICE_CTRL_BC35_WAIT_LINK     (4) /* refresh bc35 */
-#define BS_DEVICE_CTRL_BC35_UPDATA_TIME   (5) /* start bc35 */
-#define BS_DEVICE_CTRL_BC35_ENTER_PSM     (6) /* stop bc35 */
+#define BS_DEVICE_CTRL_BC35_BOOT               (1) /* get timeout(in seconds) */
+#define BS_DEVICE_CTRL_BC35_CLOSE              (2) /* set timeout(in seconds) */
+#define BS_DEVICE_CTRL_BC35_NET_INIT           (3) /* get the left time before reboot(in seconds) */
+#define BS_DEVICE_CTRL_BC35_CHECK_LINK_STATUS  (4) /* refresh bc35 */
+#define BS_DEVICE_CTRL_BC35_UPDATA_TIME        (5) /* start bc35 */
+#define BS_DEVICE_CTRL_BC35_ENTER_PSM          (6) /* stop bc35 */
 
 /**
  * SIM卡类型
@@ -79,26 +77,26 @@ bs_err_t bs_hw_bc35_register(bs_bc35_t *bc35,
 
 
 
-AtResult bc35_open(void);                                  /* 开机 */
-AtResult bc35_close(void);                                 /* 关机 */
-AtResult bc35_netInit(void);                               /* 联网初始化 */
-AtResult bc35_waitLink(void);                              /* 等待网络连接成功 */
-AtResult bc35_updataTime(char *destin, bs_uint32_t busz);  /* 更新时间 */
-AtResult bc35_enter_PSM(void);
+// AtResult bc35_open(void);                                  /* 开机 */
+// AtResult bc35_close(void);                                 /* 关机 */
+// AtResult bc35_netInit(void);                               /* 联网初始化 */
+// AtResult bc35_waitLink(void);                              /* 等待网络连接成功 */
+// AtResult bc35_updataTime(char *destin, bs_uint32_t busz);  /* 更新时间 */
+// AtResult bc35_enter_PSM(void);
 
 
-/* OC平台Socket接口 */
-AtResult bc35_link_OC(const char *ip);
-AtResult bc35_send_OC(const char *source, bs_uint32_t n);
-AtResult bc35_read_OC(char *destin, bs_uint32_t busz);
+// /* OC平台Socket接口 */
+// AtResult bc35_link_OC(const char *ip);
+// AtResult bc35_send_OC(const char *source, bs_uint32_t n);
+// AtResult bc35_read_OC(char *destin, bs_uint32_t busz);
 
-/* OneNET平台Socket接口 */
-AtResult bc35_link_OneNET(const char *ip);
-AtResult bc35_send_OneNET(const char *source, bs_uint32_t n);
-AtResult bc35_read_OneNET(char *destin, bs_uint32_t busz);
-
-
+// /* OneNET平台Socket接口 */
+// AtResult bc35_link_OneNET(const char *ip);
+// AtResult bc35_send_OneNET(const char *source, bs_uint32_t n);
+// AtResult bc35_read_OneNET(char *destin, bs_uint32_t busz);
 
 
 
-#endif /*__AT_H*/
+
+
+#endif /*__BC35_H*/
