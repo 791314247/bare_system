@@ -89,6 +89,7 @@ bs_err_t bs_device_open(bs_device_t dev, bs_uint16_t oflag)
     /* device is a stand alone device and opened */
     if ((dev->flag & BS_DEVICE_FLAG_STANDALONE) &&
         (dev->open_flag & BS_DEVICE_OFLAG_OPEN)) {
+            bs_kprintf("To open device:%s failed. The device is standalone!\n",dev->parent.name);
         return -BS_EBUSY;
     }
 

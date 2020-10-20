@@ -12,6 +12,7 @@
 #include "bsdevice.h"
 #include "board.h"
 
+#ifdef BS_USING_DEMO_GPIO
 
 static SoftTimer led1;
 static SoftTimer led2;
@@ -74,7 +75,9 @@ int gpio_demo(void)
                               TIMER_100MS_DELAY * 4, led3_timeout, BS_NULL);
     creat_continue_soft_timer(&led4, RUN_IN_LOOP_MODE,
                               TIMER_100MS_DELAY * 5, led4_timeout, BS_NULL);
+    bs_kprintf("Demo serial tx test !");
     return 0;
 }
 
 INIT_APP_EXPORT(gpio_demo);
+#endif

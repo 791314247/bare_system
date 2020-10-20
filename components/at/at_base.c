@@ -9,6 +9,8 @@
 
 #include "at_base.h"
 
+#ifdef BS_USING_AT_BASE
+
 /* 可单独选择开TX流程或者RX流程，仅在DEBUG版本设置有效，release版设置无效 */
 #ifdef BS_DEBUG
     // #define DEBUG_TX(x)
@@ -126,3 +128,4 @@ int at_base_init(void)
 }
 
 INIT_APP_EXPORT(at_base_init);
+#endif

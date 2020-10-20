@@ -169,6 +169,9 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
             /* configure low level device */
             serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_RX);
         }
+    } else {
+        if (oflag & BS_DEVICE_FLAG_INT_RX)
+            dev->open_flag |= BS_DEVICE_FLAG_INT_RX;
     }
 
     if (oflag & BS_DEVICE_FLAG_INT_TX) {
@@ -176,7 +179,6 @@ static bs_err_t bs_serial_open(struct bs_device *dev, bs_uint16_t oflag)
         /* configure low level device */
         serial->ops->control(serial, BS_DEVICE_CTRL_SET_INT, (void *)BS_DEVICE_FLAG_INT_TX);
     }
-
 
     /* set stream flag */
     dev->open_flag |= stream_flag;
@@ -266,7 +268,7 @@ void bs_hw_serial_isr(struct bs_serial_device *serial, int event)
                 rx_fifo.is_full = BS_TRUE;
                 if (rx_fifo.get_index >= serial->config.bufsz) rx_fifo.get_index = 0;
                 bs_kprintf("Warning: There is no enough buffer (%ld) for saving data,"
-                        " please increase the BS_UARTx_RX_BUFSZ option.", serial->config.bufsz);
+                           " please increase the BS_UARTx_RX_BUFSZ option.", serial->config.bufsz);
             }
 
             /* invoke callback */

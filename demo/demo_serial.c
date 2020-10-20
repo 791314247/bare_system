@@ -12,6 +12,9 @@
 #include "bsdevice.h"
 #include "drv_common.h"
 
+#ifdef BS_USING_DEMO_SERIAL
+
+#define DEMO_SERIAL            "uart1"
 
 static bs_device_t serial_dev = BS_NULL;
 static bs_size_t data_length = 0;
@@ -43,15 +46,18 @@ static bs_err_t uart_input(bs_device_t dev, bs_size_t size)
 
 int serial_demo(void)
 {
-    serial_dev = bs_device_find("uart0");
+    serial_dev = bs_device_find(DEMO_SERIAL);
     if (serial_dev == BS_NULL) {
-        bs_kprintf("find %s failed!\n", "uart0");
+        bs_kprintf("find %s failed!\n", DEMO_SERIAL);
         return (-BS_ERROR);
     }
     bs_device_open(serial_dev, BS_DEVICE_FLAG_RDWR | BS_DEVICE_FLAG_INT_RX);
     /* 设置接收回调函数 */
     bs_device_set_rx_indicate(serial_dev, uart_input);
+    bs_kprintf("Demo serial test !");
+    bs_device_write(serial_dev, 0, "Serial tx test !\r\n", bs_strlen("Serial tx test !\r\n"));
     return 0;
 }
 
 INIT_APP_EXPORT(serial_demo);
+#endif
