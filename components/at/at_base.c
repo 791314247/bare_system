@@ -40,7 +40,6 @@ static void st_serial_timout_cb(void *args)
     if (data_length >= sizeof(recv_buf))
         data_length = sizeof(recv_buf);
     bs_device_read(serial_dev, -1, p, data_length);
-    bs_device_write(serial_dev, 0, recv_buf, data_length);
 }
 
 /**
@@ -118,10 +117,14 @@ int at_base_init(void)
 {
     serial_dev = bs_device_find(BS_USING_AT_SERIAL);
     if (serial_dev == BS_NULL) {
-        bs_kprintf("At base find %s failed!\n", BS_USING_AT_SERIAL);
+        bs_kprintf("At base find %s failed!", BS_USING_AT_SERIAL);
         return (-BS_ERROR);
     }
-    bs_device_open(serial_dev, BS_DEVICE_FLAG_RDWR | BS_DEVICE_FLAG_INT_RX);
+    if (bs_device_open(serial_dev, BS_DEVICE_FLAG_RDWR | BS_DEVICE_FLAG_INT_RX) != BS_EOK) {
+        bs_kprintf("At base open fail!");
+        return (-BS_ERROR);
+    }
+    bs_kprintf("At base opened!");
     /* 设置接收回调函数 */
     bs_device_set_rx_indicate(serial_dev, uart_input);
     return 0;

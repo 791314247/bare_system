@@ -1,6 +1,6 @@
 /*
  * COPYRIGHT (C) 2018
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  *
  * Change Logs:
@@ -12,8 +12,17 @@
 
 #include <bare_sys.h>
 #include <bsdevice.h>
+#include <board.h>
 
+/* Where it needs to be configured */
+#define BC35_VDD_PIN        GET_PIN(C, 0)
+#define BC35_RESET_PIN      GET_PIN(C, 0)
+#define BC35_VDD_OPEN       PIN_HIGH        /* Logical drive */
+#define BC35_VDD_CLOSE      PIN_LOW         /* Logical close */
+#define BC35_RESET_PULL     PIN_HIGH        /* Logical pull */
+#define BC35_RESET_RELEASE  PIN_LOW         /* Logical release */
 
+/* Control command */
 #define BS_DEVICE_CTRL_BC35_BOOT               (1) /* get timeout(in seconds) */
 #define BS_DEVICE_CTRL_BC35_CLOSE              (2) /* set timeout(in seconds) */
 #define BS_DEVICE_CTRL_BC35_NET_INIT           (3) /* get the left time before reboot(in seconds) */
@@ -48,30 +57,11 @@ struct net_informations {
 };
 
 
-struct bs_bc35_ops;
-struct bs_bc35_device
-{
+struct bs_bc35_device {
     struct bs_device parent;
-    const struct bs_bc35_ops *ops;
     struct net_informations net_i;
 };
 typedef struct bs_bc35_device bs_bc35_t;
-
-struct bs_bc35_ops
-{
-    void (*gpio_init)(bs_bc35_t *bc35);
-    void (*set_vdd)(bs_bc35_t *bc35, int value);
-    void (*set_reset)(bs_bc35_t *bc35, int value);
-};
-
-bs_err_t bs_hw_bc35_register(bs_bc35_t *bc35,
-                                 const char    *name,
-                                 bs_uint32_t    flag,
-                                 void          *data);
-
-
-
-
 
 
 

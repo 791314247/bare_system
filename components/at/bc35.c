@@ -9,7 +9,7 @@
 
 #include <stdlib.h>
 #include "bc35.h"
-#include "at_base.h"
+
 
 #ifdef BS_USING_BC35
 
@@ -19,6 +19,7 @@
 
 static SoftTimer st_bc35;
 static bs_bool_t timeoutFlag;
+struct bs_bc35_device bc35;
 
 #define WAIT_1S                     1     /* 发送命令后的最小等待时间 */
 #define RESEND_ONCE                 1     /* 命令的重发次数 */
@@ -39,8 +40,13 @@ static bs_err_t bs_bc35_dev_init(struct bs_device *dev)
     BS_ASSERT(dev != BS_NULL);
     bc35 = (bs_bc35_t *)dev;
 
+    /* set pin mode to output */
+    bs_pin_mode(BC35_VDD_PIN, PIN_MODE_OUTPUT);
+    bs_pin_mode(BC35_RESET_PIN, PIN_MODE_OUTPUT);
+    bs_pin_write(BC35_VDD_PIN, BC35_VDD_CLOSE);
+    bs_pin_write(BC35_RESET_PIN, BC35_RESET_RELEASE);
+
     bs_memset(&bc35->net_i, 0, sizeof(bc35->net_i));
-    bc35->ops->gpio_init(bc35);
     return (BS_EOK);
 }
 
@@ -52,12 +58,7 @@ static bs_err_t bs_bc35_dev_open(struct bs_device *dev, bs_uint16_t oflag)
 
 static bs_err_t bs_bc35_dev_close(struct bs_device *dev)
 {
-    bs_bc35_t *bc35;
-
-    BS_ASSERT(dev != BS_NULL);
-    bc35 = (bs_bc35_t *)dev;
-
-    bc35->ops->set_vdd(bc35, 0);
+    bs_pin_write(BC35_VDD_PIN, BC35_VDD_CLOSE);
     return (BS_EOK);
 }
 
@@ -68,8 +69,8 @@ static bs_err_t bc35_control_open(bs_bc35_t *dev) /* 开机 */
 
     if (at_wait_reset == BS_FALSE) {
         at_wait_reset = BS_TRUE;
-        dev->ops->set_vdd(dev, 1);  /* 上电 */
-        dev->ops->set_reset(dev, 0);  /* 拉低复位脚 */
+        bs_pin_write(BC35_VDD_PIN, BC35_VDD_OPEN);  /* 上电 */
+        bs_pin_write(BC35_RESET_PIN, BC35_RESET_PULL);  /* 拉低复位脚 */
         timeoutFlag = BS_FALSE;
         creat_single_soft_timer(&st_bc35,
                                 RUN_IN_LOOP_MODE,
@@ -77,7 +78,7 @@ static bs_err_t bc35_control_open(bs_bc35_t *dev) /* 开机 */
                                 st_bc35_timeout_cb, BS_NULL);
         bs_kprintf("Bc35 power on and press reset pin!");
     } else if (timeoutFlag && at_wait_reset == BS_TRUE && at_wait_recv == BS_FALSE) {
-        dev->ops->set_reset(dev, 1);  /* BC35复位引脚拉低1秒后恢复，硬复位 */
+        bs_pin_write(BC35_RESET_PIN, BC35_RESET_RELEASE);  /* BC35复位引脚拉低1秒后恢复，硬复位 */
         at_wait_recv = BS_TRUE;
         timeoutFlag = BS_FALSE;
         creat_single_soft_timer(&st_bc35,
@@ -101,7 +102,7 @@ static bs_err_t bc35_control_open(bs_bc35_t *dev) /* 开机 */
 
 static bs_err_t bc35_control_close(bs_bc35_t *dev) /* 关机 */
 {
-    dev->ops->set_vdd(dev, 0);
+    bs_pin_write(BC35_VDD_PIN, BC35_VDD_CLOSE);
     return BS_EOK;
 }
 
@@ -413,26 +414,22 @@ const static struct bs_device_ops bc35_ops = {
 /**
  * This function register a bc35 device
  */
-bs_err_t bs_hw_bc35_register(struct bs_bc35_device *bc35,
-                             const char                *name,
-                             bs_uint32_t                flag,
-                             void                      *data)
+int bs_bc35_dev_register(void)
 {
-    struct bs_device *device;
-    BS_ASSERT(bc35 != BS_NULL);
-
-    device = &(bc35->parent);
+    struct bs_device *device = (struct bs_device *)&bc35;
+    BS_ASSERT(device != BS_NULL);
 
     device->type        = BS_Device_Class_Block;
     device->rx_indicate = BS_NULL;
     device->tx_complete = BS_NULL;
     device->ops         = &bc35_ops;
-    device->user_data   = data;
+    device->user_data   = BS_NULL;
 
     /* register a character device */
-    return bs_device_register(device, name, flag);
+    return bs_device_register(device, "bc35", BS_DEVICE_FLAG_STANDALONE);
 }
 
+INIT_DEVICE_EXPORT(bs_bc35_dev_register);
 
 
 

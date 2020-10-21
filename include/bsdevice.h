@@ -15,6 +15,9 @@
 #include "serial.h"
 #include "watchdog.h"
 
+/* Components */
+#include "at_base.h"
+#include "bc35.h"
 
 
 

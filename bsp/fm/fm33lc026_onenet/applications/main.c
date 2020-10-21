@@ -13,7 +13,6 @@
 
 
 
-
 int main(void)
 {
     bs_device_t wdt_dev;
