@@ -10,9 +10,48 @@
 #include <board.h>
 #include <bsdevice.h>
 
-#if defined(BSP_USING_ADC)
+#if defined(BSP_USING_ADC0) || defined(BSP_USING_ADC1) || defined(BSP_USING_ADC2) || \
+    defined(BSP_USING_ADC3) || defined(BSP_USING_ADC4) || defined(BSP_USING_ADC5) || \
+    defined(BSP_USING_ADC6) || defined(BSP_USING_ADC7) || defined(BSP_USING_ADC8) || \
+    defined(BSP_USING_ADC9) || defined(BSP_USING_ADC10) || defined(BSP_USING_ADC11)
 
-struct bs_adc_device adc_obj;
+#ifdef BSP_USING_ADC0
+    struct bs_adc_device adc0_obj;
+#endif
+#ifdef BSP_USING_ADC1
+    struct bs_adc_device adc1_obj;
+#endif
+#ifdef BSP_USING_ADC2
+    struct bs_adc_device adc2_obj;
+#endif
+#ifdef BSP_USING_ADC3
+    struct bs_adc_device adc3_obj;
+#endif
+#ifdef BSP_USING_ADC4
+    struct bs_adc_device adc4_obj;
+#endif
+#ifdef BSP_USING_ADC5
+    struct bs_adc_device adc5_obj;
+#endif
+#ifdef BSP_USING_ADC6
+    struct bs_adc_device adc6_obj;
+#endif
+#ifdef BSP_USING_ADC7
+    struct bs_adc_device adc7_obj;
+#endif
+#ifdef BSP_USING_ADC8
+    struct bs_adc_device adc8_obj;
+#endif
+#ifdef BSP_USING_ADC9
+    struct bs_adc_device adc9_obj;
+#endif
+#ifdef BSP_USING_ADC10
+    struct bs_adc_device adc10_obj;
+#endif
+#ifdef BSP_USING_ADC11
+    struct bs_adc_device adc11_obj;
+#endif
+
 
 static void fm_adc_gpio_init(void)
 {
@@ -170,47 +209,14 @@ static bs_uint32_t fm_get_adc_value(bs_uint32_t channel)
 }
 
 
-static bs_err_t fm_adc_control(bs_watchdog_t *wdt, int cmd, void *arg)
+static bs_err_t fm_adc_control(bs_adc_device_t device, int cmd, void *arg)
 {
     uint32_t *adc_value = (uint32_t *)arg;
 
     switch (cmd) {
     /* feed the watchdog */
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL0_VALUE:
-        *adc_value = fm_get_adc_value(0);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL1_VALUE:
-        *adc_value = fm_get_adc_value(1);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL2_VALUE:
-        *adc_value = fm_get_adc_value(2);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL3_VALUE:
-        *adc_value = fm_get_adc_value(3);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL4_VALUE:
-        *adc_value = fm_get_adc_value(4);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL5_VALUE:
-        *adc_value = fm_get_adc_value(5);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL6_VALUE:
-        *adc_value = fm_get_adc_value(6);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL7_VALUE:
-        *adc_value = fm_get_adc_value(7);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL8_VALUE:
-        *adc_value = fm_get_adc_value(8);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL9_VALUE:
-        *adc_value = fm_get_adc_value(9);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL10_VALUE:
-        *adc_value = fm_get_adc_value(10);
-        break;
-    case BS_DEVICE_CTRL_ADC_GET_CHANNEL11_VALUE:
-        *adc_value = fm_get_adc_value(11);
+    case BS_DEVICE_CTRL_ADC_GET_CONVERT_VALUE:
+        *adc_value = fm_get_adc_value((bs_uint32_t)(atol(&device->parent.parent.name[3])));
         break;
     default:
         bs_kprintf("This command is not supported.");
@@ -222,15 +228,50 @@ static bs_err_t fm_adc_control(bs_watchdog_t *wdt, int cmd, void *arg)
 
 static const struct bs_adc_ops fm_adc_ops = {
     .init = fm_adc_init,
-    .control = fm_adc_control,
+    .control = fm_adc_control
 };
 
-static int fm_adc_init(void)
+static int fm_adc_hw_register(void)
 {
     fm_adc_gpio_init();
-    bs_hw_adc_register(&adc_obj, "ADC", &fm_adc_ops, BS_NULL);
+#ifdef BSP_USING_ADC0
+    bs_hw_adc_register(&adc0_obj, "adc0", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC1
+    bs_hw_adc_register(&adc1_obj, "adc1", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC2
+    bs_hw_adc_register(&adc2_obj, "adc2", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC3
+    bs_hw_adc_register(&adc3_obj, "adc3", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC4
+    bs_hw_adc_register(&adc4_obj, "adc4", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC5
+    bs_hw_adc_register(&adc5_obj, "adc5", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC6
+    bs_hw_adc_register(&adc6_obj, "adc6", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC7
+    bs_hw_adc_register(&adc7_obj, "adc7", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC8
+    bs_hw_adc_register(&adc8_obj, "adc8", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC9
+    bs_hw_adc_register(&adc9_obj, "adc9", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC10
+    bs_hw_adc_register(&adc10_obj, "adc10", &fm_adc_ops, BS_NULL);
+#endif
+#ifdef BSP_USING_ADC11
+    bs_hw_adc_register(&adc11_obj, "adc11", &fm_adc_ops, BS_NULL);
+#endif
     return BS_EOK;
 }
-INIT_BOARD_EXPORT(stm32_adc_init);
+INIT_DEVICE_EXPORT(fm_adc_hw_register);
 
 #endif /* BSP_USING_ADC */

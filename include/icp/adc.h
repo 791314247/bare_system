@@ -13,18 +13,8 @@
 #include <bsdevice.h>
 
 /* Control command */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL0_VALUE  (1) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL1_VALUE  (2) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL2_VALUE  (3) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL3_VALUE  (4) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL4_VALUE  (5) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL5_VALUE  (6) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL6_VALUE  (7) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL7_VALUE  (8) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL8_VALUE  (9) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL9_VALUE  (10) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL10_VALUE  (11) /* Gets the ADC conversion value */
-#define BS_DEVICE_CTRL_ADC_GET_CHANNEL11_VALUE  (12) /* Gets the ADC conversion value */
+#define BS_DEVICE_CTRL_ADC_GET_CONVERT_VALUE  (1) /* Gets the ADC conversion value */
+
 
 
 

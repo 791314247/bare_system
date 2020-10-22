@@ -27,7 +27,7 @@
 // #define BS_USING_AT_BASE
 // #define BS_USING_AT_SERIAL         "uart1"
 // #define BS_USING_BC35
-#define BSP_USING_ADC
+#define BSP_USING_ADC0
 
 
 /* demo selection */
