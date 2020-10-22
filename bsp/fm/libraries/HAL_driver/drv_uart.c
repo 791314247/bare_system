@@ -8,16 +8,12 @@
  */
 
 #include <board.h>
+
+/*  When you USING SERIAL, you must define a serial port*/
+#if defined(BSP_USING_UART0) || defined(BSP_USING_UART1) || defined(BSP_USING_UART2) || \
+    defined(BSP_USING_UART3) || defined(BSP_USING_UART4) || defined(BSP_USING_UART5) || \
+    defined(BSP_USING_UART6) || defined(BSP_USING_UART7) || defined(BSP_USING_LPUART1)
 #include <drv_uart.h>
-
-#ifdef BS_USING_SERIAL
-
-/*  When you open RT_USING_SERIAL, you must define a serial port*/
-#if !defined(BSP_USING_UART0) && !defined(BSP_USING_UART1) && !defined(BSP_USING_UART2) && \
-    !defined(BSP_USING_UART3) && !defined(BSP_USING_UART4) && !defined(BSP_USING_UART5) && \
-    !defined(BSP_USING_UART6) && !defined(BSP_USING_UART7) && !defined(BSP_USING_LPUART1)
-    #error "Please define at least one BSP_USING_UARTx !"
-#endif
 
 #if defined(FM33LC0XX) /*The FM33LC0XX supported serial port is Uart0 Uart1 Uart4 Uart5 LUart1*/
     #if defined(BSP_USING_UART2) || defined(BSP_USING_UART3) || defined(BSP_USING_LPUART0)

@@ -13,7 +13,7 @@
 #ifdef BS_USING_WDT
 
 
-static struct bs_watchdog_device wdt_obj;
+static bs_watchdog_t wdt_obj;
 
 static bs_err_t wdt_init(bs_watchdog_t *wdt)
 {

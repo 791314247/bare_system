@@ -14,6 +14,7 @@
 #include "pin.h"
 #include "serial.h"
 #include "watchdog.h"
+#include "adc.h"
 
 /* Components */
 #include "at_base.h"

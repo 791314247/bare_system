@@ -35,7 +35,6 @@ ncscope.*
 tags
 
 *.uvguix.*
-.vscode
 JLinkLog.txt
 JLinkSettings.ini
 

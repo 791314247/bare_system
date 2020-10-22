@@ -90,7 +90,7 @@
     PARITY_NONE,      /* No parity  */     \
     BIT_ORDER_LSB,    /* LSB first sent */ \
     NRZ_NORMAL,       /* Normal mode */    \
-    BS_UART1_RX_BUFSZ,  /* buf size */     \
+    BS_UART4_RX_BUFSZ,  /* buf size */     \
     0                                      \
 }
 #endif /* BSP_USING_UART4 */
