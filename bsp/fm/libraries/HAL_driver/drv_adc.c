@@ -15,6 +15,9 @@
     defined(BSP_USING_ADC6) || defined(BSP_USING_ADC7) || defined(BSP_USING_ADC8) || \
     defined(BSP_USING_ADC9) || defined(BSP_USING_ADC10) || defined(BSP_USING_ADC11)
 
+#define ADC_VREF    (*((uint16_t *)(0x1FFFFB08)))   // 30摄氏度 vref1.22采样值
+#define ADC_VREF1    (*((uint16_t *)(0x1FFFFB0c)))   // 30摄氏度 vref1.22采样值
+
 #ifdef BSP_USING_ADC0
     struct bs_adc_device adc0_obj;
 #endif
@@ -186,9 +189,31 @@ static bs_uint32_t fm_adc_get_channel(bs_uint32_t channel)
     return fm_channel;
 }
 
+static bs_uint32_t fm_get_adc_vref_value(void)
+{
+    bs_uint16_t vref_value = 0;
+    LL_RCC_SetADCPrescaler(LL_RCC_ADC_OPERATION_CLOCK_PRESCALER_DIV8);
+    LL_VREF_EnableVREFBuffer(VREF);
+    LL_ADC_EnalbleSequencerChannel(ADC, LL_ADC_INTERNAL_CH_VREF);
+
+    LL_ADC_ClearFlag_EOC(ADC);
+    LL_ADC_Enable(ADC);
+    LL_ADC_StartConversion(ADC);
+
+    while (LL_ADC_IsActiveFlag_EOC(ADC) == RESET);
+    LL_ADC_ClearFlag_EOC(ADC);
+    vref_value = LL_ADC_ReadConversionData12(ADC);
+
+    LL_ADC_Disable(ADC);
+    LL_ADC_DisableSequencerChannel(ADC, LL_ADC_INTERNAL_CH_VREF);
+    LL_VREF_DisableVREFBuffer(VREF);
+
+    return (bs_uint32_t)vref_value;
+}
+
 static bs_uint32_t fm_get_adc_value(bs_uint32_t channel)
 {
-    uint16_t adc_value = 0;
+    bs_uint16_t adc_value = 0;
     bs_uint32_t fm_channel = 0;
 
     fm_channel = fm_adc_get_channel(channel);
@@ -211,12 +236,16 @@ static bs_uint32_t fm_get_adc_value(bs_uint32_t channel)
 
 static bs_err_t fm_adc_control(bs_adc_device_t device, int cmd, void *arg)
 {
-    uint32_t *adc_value = (uint32_t *)arg;
+    bs_uint32_t adc_vref_value = 0;
+    bs_uint32_t adc_dr_value = 0;
+    bs_uint32_t *adc_value = (bs_uint32_t *)arg;
 
     switch (cmd) {
     /* feed the watchdog */
     case BS_DEVICE_CTRL_ADC_GET_CONVERT_VALUE:
-        *adc_value = fm_get_adc_value((bs_uint32_t)(atol(&device->parent.parent.name[3])));
+        adc_vref_value = fm_get_adc_vref_value();
+        adc_dr_value = fm_get_adc_value((bs_uint32_t)(atol(&device->parent.parent.name[3])));
+        *adc_value = (adc_dr_value * 3000 * (ADC_VREF)) / (adc_vref_value * 4095);
         break;
     default:
         bs_kprintf("This command is not supported.");

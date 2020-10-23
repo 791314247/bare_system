@@ -33,6 +33,7 @@
 /* demo selection */
 #define BS_USING_DEMO_GPIO
 #define BS_USING_DEMO_SERIAL
+//#define BS_USING_DEMO_ADC
 //#define BS_USING_DEMO_BC35
 
 
