@@ -17,7 +17,7 @@
     #error "Must define BS_USING_AT_BASE and add "at base" device!"
 #endif
 
-static SoftTimer st_bc35;
+static struct bs_timer st_bc35;
 static bs_bool_t timeoutFlag;
 struct bs_bc35_device bc35;
 

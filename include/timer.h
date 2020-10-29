@@ -1,7 +1,13 @@
-/**
- * sfor_timer_list.h
- * 链表实现的软件定时器库
+/*
+ * Copyright (c) 2006-2018, bare-system Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ *
  */
+
 #ifndef __SOFT_TIMER_LIST_H
 #define __SOFT_TIMER_LIST_H
 
@@ -25,132 +31,69 @@
 #endif
 #define TIMER_SEC_DELAY                      TIMER_TICK_PER_SECOND
 
-// #define ENABLE_CUSTOM_RUN_NUM
 
 
 /**
- * 定时模式选择
+ * timer init macros
  */
-typedef enum {
-    ONCE_MODE,                            /* 单次定时模式，即超时后自动关闭定时器 */
-    CONTINUE_MODE,                        /* 持续定时模式，只要开启除非手动关闭否则永不停歇 */
-    CUSTOM_NUM_MODE,                      /* 定义次数的模式，运行指定的次数后关闭定时器 */
-} TimerTimingModeType;
-
-
+#define BS_TIMER_FLAG_ONE_SHOT          0x1    /**< 单次计数，计数完毕后自动删除定时器 */
+#define BS_TIMER_FLAG_PERIODIC          0x2    /**< 持续计数 */
 /**
  * 定时超时后运行的回调函数可以选择在中断直接运行或者挂起任务轮询执行
  * 只要在定时需求准确的时候才建议选择中断模式执行，类似无磁传感器脉冲测量
  * 像一些超时判断类的应用以轮询的方式进行执行
- * 中断执行模式越多，其他定时器越不准,毕竟中断允许占时间，查询其他定时器时
+ * 中断执行模式越多，其他定时器越不准,毕竟中断执行占时间，查询其他定时器时
  * 会有延时
  */
-typedef enum {
-    RUN_IN_LOOP_MODE,                      /* 轮询执行模式 */
-    RUN_IN_INTERRUPT_MODE,                 /* 中断实时执行模式 */
-} TimerRunModeType;
+#define BS_TIMER_FLAG_INTERRUPT_MODE    0x4
+/**
+ * 添加此flag后可在init的同时启动定时器
+ */
+#define BS_TIMER_FLAG_START             0x8
+/**
+ * 此flag用户不必使用
+ */
+#define BS_TIMER_FLAG_LOOP_START        0x10
+
+
+/**
+ * timer ctrl macros
+ */
+#define BS_TIMER_CTRL_START             0x0       /**< start timer */
+#define BS_TIMER_CTRL_STOP              0x1       /**< stop timer */
+#define BS_TIMER_CTRL_SET_TIME          0x2       /**< 设置新的定时时长并重新开始计数 */
+#define BS_TIMER_CTRL_GET_TIME          0x3       /**< 获取当前定时时长 */
+#define BS_TIMER_CTRL_RESTART           0x4       /**< 重新启动定时器，如果定时器已从链表删除，则重新添加 */
+#define BS_TIMER_CTRL_DELETE            0x5       /**< 停止定时器并从链表删除 */
+
 
 
 /**
  * 软件定时器基本类型
  */
-typedef struct SoftTimer {
-    unsigned long counter;       /* 计数              */
-    unsigned long duration;               /* 定时时长          */
-#ifdef ENABLE_CUSTOM_RUN_NUM
-    unsigned long run_num;                /* 自定义的定时次数  */
-#endif
-    volatile bs_bool_t start_flag;                      /* 启动标志          */
-    volatile bs_bool_t loop_flag;                       /* 轮询标志          */
-    TimerRunModeType run_mode;
-    TimerTimingModeType timing_mode;
-    void (*callback_function)(void *args);     /* 回调函数          */
-    void *args;
-    struct SoftTimer *next;
-} SoftTimer;
+struct bs_timer {
+    bs_uint32_t counter;                     /* 计数              */
+    bs_uint32_t duration;                    /* 定时时长          */
+    void (*timeout)(void *parameter);        /* 回调函数          */
+    void *parameter;
+    bs_uint8_t flags;
+    struct bs_timer *next;
+};
+
+typedef struct bs_timer *bs_timer_t;
 
 
-/*
- * 创建一个只运行一次的软件定时器并立刻开始计时
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-void creat_single_soft_timer(SoftTimer *p,
-                             TimerRunModeType mode,
-                             unsigned long duration,
-                             void(*timeout_handler)(void *args),
-                             void *args);
 
-/*
- * 创建永远运行的软件定时器并立刻开始计时
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-void creat_continue_soft_timer(SoftTimer *p,
-                               TimerRunModeType mode,
-                               unsigned long duration,
-                               void(*timeout_handler)(void *args),
-                               void *args);
-
-/*
- * 创建指定次数运行的软件定时器并立刻开始计时
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        run_num：要定时的次数，比如1就是定时1次，5就是定时5次以后自动关闭定时器
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-#ifdef ENABLE_CUSTOM_RUN_NUM
-void creat_limit_num_soft_timer(SoftTimer *p,
-                                TimerRunModeType mode,
-                                unsigned long run_num,
-                                unsigned long duration,
-                                void(*timeout_handler)(void *args),
-                                void args);
-#endif
-
-/*
- * 重启指定的单次软件定时器
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-void restart_single_soft_timer(SoftTimer *p,
-                               TimerRunModeType mode,
-                               unsigned long duration,
-                               void(*timeout_handler)(void *args),
-                               void *args);
-
-/*
- * 重设指定定时器的计数值
- * 参数表：p: 定时器结构体指针，由用户创建
- *        duration: 要计时的时长，单位为硬件中断的tick
- * return：无
- */
-void soft_timer_reset_interval(SoftTimer *p, unsigned long duration);
-
-
-/**
- * 删除一个软件定时器
- */
-void stop_timer(SoftTimer *p);
-
-
+bs_err_t bs_timer_init(bs_timer_t timer,
+                       bs_uint32_t time,
+                       void (*timeout)(void *parameter),
+                       void       *parameter,
+                       bs_uint8_t  flags);
+bs_err_t bs_timer_control(bs_timer_t timer, bs_uint8_t cmd, void *arg);
 /**
  * 系统main循环进程，用于执行轮询模式的回调函数
  */
 void soft_timer_main_loop(void);
-
-
 /**
  * 此函数为tick中断服务函数，需要挂载在外部硬件定时器上
  * 因此软件定时器的定时精度由此函数挂载的硬件定时时间决定，

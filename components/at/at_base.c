@@ -24,8 +24,8 @@
 
 static char recv_buf[256];
 
-static SoftTimer st_serial;
-static SoftTimer st_comm;
+static struct bs_timer st_serial;
+static struct bs_timer st_comm;
 
 static bs_size_t data_length;
 static bs_device_t serial_dev = BS_NULL;

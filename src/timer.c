@@ -1,228 +1,39 @@
-/**
- * sfor_timer_list.c
- * 链表实现的软件定时器库，需要用户的低功耗定时器做支持
+/*
+ * Copyright (c) 2006-2018, bare-system Development Team
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ *
  */
 
 #include "timer.h"
 
+
 /**
  * 软件定时器内部变量
  */
-static SoftTimer *head_point = BS_NULL;
+static bs_timer_t head_point = BS_NULL;
 
-static struct SoftTimer *creat_node(SoftTimer *node);
-static char delete_node(SoftTimer *node);
-static bs_bool_t is_node_already_creat(SoftTimer *node);
-
-
-/**
- * 系统main循环进程，用于执行轮询模式的回调函数
- */
-void soft_timer_main_loop(void)
+static bs_bool_t is_node_already_creat(bs_timer_t node)
 {
-    struct SoftTimer *list = head_point;
+    bs_timer_t list;   //list保存当前需要检查的节点的地址
+    if (node == BS_NULL)
+        return BS_FALSE;
 
-    while (list != BS_NULL) { //下一个节点如果不为空
-        if (list->loop_flag == BS_TRUE) {
-            list->loop_flag = BS_FALSE;
-            if (list->callback_function)
-                list->callback_function(list->args);
-            if (list->start_flag != BS_TRUE)
-                delete_node(list);   /* 如果定时器被删除就删除节点 */
-        }
-        /*  寻找下一个有意义的节点  */
-        list = list->next;
+    list = head_point;
+    while (list != BS_NULL) {
+        if (list == node)
+            return BS_TRUE;
+        list = list->next;       //后移一个节点
     }
+    return BS_FALSE;
 }
 
-
-/*
- * 创建一个只运行一次的软件定时器并立刻开始计时
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-void creat_single_soft_timer(SoftTimer *p,
-                             TimerRunModeType mode,
-                             unsigned long duration,
-                             void(*timeout_handler)(void *args),
-                             void *args)
+static bs_timer_t creat_node(bs_timer_t node)
 {
-    BS_ASSERT(p != BS_NULL);
-    BS_ASSERT(timeout_handler != BS_NULL);
-    BS_ASSERT(duration > 0);
-
-    p->start_flag = BS_TRUE;
-    p->counter = 0;
-    p->loop_flag = BS_FALSE;
-    p->duration = duration;
-    if (mode == RUN_IN_LOOP_MODE)
-        p->run_mode = RUN_IN_LOOP_MODE;
-    else
-        p->run_mode = RUN_IN_INTERRUPT_MODE;
-    p->callback_function = timeout_handler;
-    p->args = args;
-    p->timing_mode = ONCE_MODE;
-
-#ifdef ENABLE_CUSTOM_RUN_NUM
-    p->run_num = 0; /* 只有在自定义运行次数的情况下此值才有效 */
-#endif
-    head_point = creat_node(p);
-}
-
-
-/*
- * 创建永远运行的软件定时器并立刻开始计时
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行(除非实在必要)还是置起标志在while循环内轮询执行
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-void creat_continue_soft_timer(SoftTimer *p,
-                               TimerRunModeType mode,
-                               unsigned long duration,
-                               void(*timeout_handler)(void *args),
-                               void *args)
-{
-    BS_ASSERT(p != BS_NULL);
-    BS_ASSERT(timeout_handler != BS_NULL);
-    BS_ASSERT(duration > 0);
-
-    p->start_flag = BS_TRUE;
-    p->counter = 0;
-    p->loop_flag = BS_FALSE;
-    p->duration = duration;
-    if (mode == RUN_IN_LOOP_MODE)
-        p->run_mode = RUN_IN_LOOP_MODE;
-    else
-        p->run_mode = RUN_IN_INTERRUPT_MODE;
-    p->callback_function = timeout_handler;
-    p->args = args;
-    p->timing_mode = CONTINUE_MODE;
-
-#ifdef ENABLE_CUSTOM_RUN_NUM
-    p->run_num = 0;       /* 只有在自定义运行次数的情况下此值才有效 */
-#endif
-    head_point = creat_node(p);
-}
-
-
-
-/*
- * 创建指定次数运行的软件定时器并立刻开始计时
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        run_num：要定时的次数，比如1就是定时1次，5就是定时5次以后自动关闭定时器
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-
-#ifdef ENABLE_CUSTOM_RUN_NUM
-void creat_limit_num_soft_timer(SoftTimer *p,
-                                TimerRunModeType mode,
-                                unsigned long run_num,
-                                unsigned long duration,
-                                void(*timeout_handler)(void *args),
-                                void args)
-{
-    BS_ASSERT(p != BS_NULL);
-    BS_ASSERT(timeout_handler != BS_NULL);
-    BS_ASSERT(duration > 0);
-
-    p->start_flag = BS_TRUE;
-    p->counter = 0;
-    p->loop_flag = BS_FALSE;
-    p->duration = duration;
-    if (mode == RUN_IN_LOOP_MODE)
-        p->run_mode = RUN_IN_LOOP_MODE;
-    else
-        p->run_mode = RUN_IN_INTERRUPT_MODE;
-    p->callback_function = timeout_handler;
-    p->args = args;
-    p->timing_mode = CUSTOM_NUM_MODE;
-    p->run_num = run_num;       /* 只有在自定义运行次数的情况下此值才有效 */
-    head_point = creat_node(p);
-}
-#endif
-
-
-/*
- * 重启指定的单次软件定时器
- * 参数表：p: 定时器结构体指针，由用户创建
- *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
- *        duration: 要计时的时长，单位为硬件中断的tick
- *        timeout_handler: 定时到了之后要执行的函数指针
- * return：无
- */
-void restart_single_soft_timer(SoftTimer *p,
-                               TimerRunModeType mode,
-                               unsigned long duration,
-                               void(*timeout_handler)(void *args),
-                               void *args)
-{
-    BS_ASSERT(p != BS_NULL);
-    BS_ASSERT(timeout_handler != BS_NULL);
-    BS_ASSERT(duration > 0);
-
-    p->start_flag = BS_TRUE;
-    p->counter = 0;
-    p->loop_flag = BS_FALSE;
-    p->duration = duration;
-    if (mode == RUN_IN_LOOP_MODE)
-        p->run_mode = RUN_IN_LOOP_MODE;
-    else
-        p->run_mode = RUN_IN_INTERRUPT_MODE;
-    p->callback_function = timeout_handler;
-    p->args = args;
-    p->timing_mode = ONCE_MODE;
-
-#ifdef ENABLE_CUSTOM_RUN_NUM
-    p->run_num = 0; /* 只有在自定义运行次数的情况下此值才有效 */
-#endif
-    if (is_node_already_creat(p) != BS_TRUE) /* 若之前的节点已被删除就重新创建 */
-        head_point = creat_node(p);
-}
-
-
-
-/*
- * 重设指定定时器的计数值
- * 参数表：p: 定时器结构体指针，由用户创建
- *        duration: 要计时的时长，单位为硬件中断的tick
- * return：无
- */
-void soft_timer_reset_interval(SoftTimer *p, unsigned long duration)
-{
-    BS_ASSERT(p != BS_NULL);
-    BS_ASSERT(duration > 0);
-
-    p->counter = 0;
-    p->duration = duration;
-}
-
-
-/**
- * 封装后给用户使用
- */
-void stop_timer(SoftTimer *p)
-{
-    BS_ASSERT(p != BS_NULL);
-
-    if (p != BS_NULL) {
-        p->counter = 0;
-        p->start_flag = BS_FALSE;
-        delete_node(p);
-    }
-}
-
-
-static struct SoftTimer *creat_node(SoftTimer *node)
-{
-    struct SoftTimer *list;   //list保存当前需要检查的节点的地址
+    bs_timer_t list;   //list保存当前需要检查的节点的地址
     if (node == BS_NULL)
         return head_point;
 
@@ -244,13 +55,12 @@ static struct SoftTimer *creat_node(SoftTimer *node)
     return head_point;
 }
 
-
-static char delete_node(SoftTimer *node)
+static bs_err_t delete_node(bs_timer_t node)
 {
-    struct SoftTimer *list;   //list保存当前需要检查的节点的地址
-    struct SoftTimer *temp;
+    bs_timer_t list;   //list保存当前需要检查的节点的地址
+    bs_timer_t temp;
     if (node == BS_NULL)
-        return 1;
+        return BS_EOK;
 
     list = head_point;
     if (node == head_point) {
@@ -260,33 +70,115 @@ static char delete_node(SoftTimer *node)
             temp = list;     /* 记录当前节点 */
             list = list->next; /* 检索的是下一个节点  */
             if (list == BS_NULL) {
-                return 1;
+                return BS_EOK;
             }
             if (list == node) {
                 temp->next = list->next; /* 删除此节点 */
-                return 0;
+                return BS_EOK;
             }
         }
     }
-    return 0;
+    return (-BS_ERROR);
 }
 
 
-static bs_bool_t is_node_already_creat(SoftTimer *node)
+
+/*
+ * 创建一个软件定时器
+ * 参数表：p: 定时器结构体指针，由用户创建
+ *        mode: 选择运行模式，可选定时器到了之后是直接在tick中断内执行还是置起标志在while循环内轮询执行
+ *        duration: 要计时的时长，单位为硬件中断的tick
+ *        timeout_handler: 定时到了之后要执行的函数指针
+ * return：无
+ */
+bs_err_t bs_timer_init(bs_timer_t timer,
+                       bs_uint32_t time,
+                       void (*timeout)(void *parameter),
+                       void       *parameter,
+                       bs_uint8_t  flags)
 {
-    struct SoftTimer *list;   //list保存当前需要检查的节点的地址
-    if (node == BS_NULL)
-        return BS_FALSE;
+    BS_ASSERT(timer != BS_NULL);
+    BS_ASSERT(timeout != BS_NULL);
+    BS_ASSERT(time > 0);
 
-    list = head_point;
-    while (list != BS_NULL) {
-        if (list == node)
-            return BS_TRUE;
-        list = list->next;       //后移一个节点
-    }
-    return BS_FALSE;
+    bs_hw_interrupt_disable();
+    timer->counter = 0;
+    timer->duration = time;
+    timer->timeout = timeout;
+    timer->parameter = parameter;
+    timer->flags = flags;
+    head_point = creat_node(timer);
+    bs_hw_interrupt_enable();
+    return BS_EOK;
 }
 
+
+bs_err_t bs_timer_control(bs_timer_t timer, bs_uint8_t cmd, void *arg)
+{
+    BS_ASSERT(timer != BS_NULL);
+
+    bs_hw_interrupt_disable();
+    switch (cmd) {
+    case BS_TIMER_CTRL_START:
+        timer->counter = 0;
+        timer->flags |= BS_TIMER_FLAG_START;
+        break;
+
+    case BS_TIMER_CTRL_STOP:
+        timer->flags &= ~BS_TIMER_FLAG_START;
+        timer->flags &= ~BS_TIMER_FLAG_LOOP_START;
+        timer->counter = 0;
+        break;
+
+    case BS_TIMER_CTRL_SET_TIME:
+        if (arg != BS_NULL)
+            timer->duration = *(bs_uint32_t *)arg;
+        timer->counter = 0;
+        timer->flags |= BS_TIMER_FLAG_START;
+        break;
+
+    case BS_TIMER_CTRL_GET_TIME:
+        if (arg != BS_NULL)
+            *(bs_uint32_t *)arg = timer->duration;
+        break;
+
+    case BS_TIMER_CTRL_RESTART:
+        if (arg != BS_NULL)
+            timer->duration = *(bs_uint32_t *)arg;
+        timer->flags |= BS_TIMER_FLAG_START;
+        timer->counter = 0;
+        creat_node(timer);
+        break;
+
+    case BS_TIMER_CTRL_DELETE:
+        timer->flags &= ~BS_TIMER_FLAG_START;
+        timer->counter = 0;
+        delete_node(timer);
+        break;
+    }
+    bs_hw_interrupt_enable();
+    return BS_EOK;
+}
+
+/**
+ * 系统main循环进程，用于执行轮询模式的回调函数
+ */
+void soft_timer_main_loop(void)
+{
+    bs_timer_t list = head_point;
+
+    while (list != BS_NULL) { //下一个节点如果不为空
+        if (list->flags & BS_TIMER_FLAG_LOOP_START) {
+            list->flags &= ~BS_TIMER_FLAG_LOOP_START;
+            if (list->timeout)
+                list->timeout(list->parameter);
+            if (!(list->flags & BS_TIMER_FLAG_START))
+                delete_node(list);   /* 如果定时器被删除就删除节点 */
+        }
+        /*  寻找下一个有意义的节点  */
+        list = list->next;
+    }
+}
 
 /**
  * 此函数为tick中断服务函数，需要挂载在外部硬件定时器上
@@ -296,35 +188,24 @@ static bs_bool_t is_node_already_creat(SoftTimer *node)
  */
 void soft_timer_isr(void)
 {
-    struct SoftTimer *list = head_point;
+    bs_timer_t list = head_point;
 
     while (list != BS_NULL) { //下一个节点如果不为空
-        if (list->start_flag != BS_FALSE) { /* 判断当前定时器是否被开启  */
+        if (list->flags & BS_TIMER_FLAG_START) { /* 判断当前定时器是否被开启  */
             if (++list->counter >= list->duration) { /* 判断当前计时有没有到达 */
-                switch (list->timing_mode) {
-                case ONCE_MODE:
-                    list->start_flag = BS_FALSE;
-                    break;
-                case CONTINUE_MODE:
-                    break;
-#ifdef ENABLE_CUSTOM_RUN_NUM
-                case CUSTOM_NUM_MODE:
-                    if (list->run_num > 0) {
-                        if (--list->run_num == 0) {
-                            list->start_flag = BS_FALSE;
-                        }
-                    }
-#endif
-                default:
-                    break;
+                if (list->flags & BS_TIMER_FLAG_ONE_SHOT) {
+                    list->flags &= ~BS_TIMER_FLAG_START;
+                    list->flags |= BS_TIMER_FLAG_LOOP_START;
                 }
-                if (list->run_mode == RUN_IN_INTERRUPT_MODE) {
-                    if (list->callback_function)
-                        list->callback_function(list->args);   /* 中断内直接运行回调函数，用于实时性比较高的程序 */
-                    if (list->start_flag != BS_TRUE)
+                if (list->flags & BS_TIMER_FLAG_PERIODIC) {
+                    list->flags |= BS_TIMER_FLAG_LOOP_START;
+                }
+                if (list->flags & BS_TIMER_FLAG_INTERRUPT_MODE) {
+                    if (list->timeout)
+                        list->timeout(list->parameter);   /* 中断内直接运行回调函数，用于实时性比较高的程序 */
+                    if (!(list->flags & BS_TIMER_FLAG_START))
                         delete_node(list);
-                } else
-                    list->loop_flag = BS_TRUE;
+                }
                 list->counter = 0;
             }
         }

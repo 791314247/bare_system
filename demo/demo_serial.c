@@ -18,7 +18,7 @@
 
 static bs_device_t serial_dev = BS_NULL;
 static bs_size_t data_length = 0;
-static SoftTimer st_serial;
+static struct bs_timer st_serial;
 static char buf[500] = {0};
 
 /**
@@ -39,8 +39,8 @@ static void st_serial_timout_cb(void *args)
 static bs_err_t uart_input(bs_device_t dev, bs_size_t size)
 {
     data_length = size;
-    creat_single_soft_timer(&st_serial, RUN_IN_LOOP_MODE,
-                            TIMER_100MS_DELAY * 2, st_serial_timout_cb, BS_NULL);
+    bs_timer_init(&st_serial, TIMER_100MS_DELAY * 2, st_serial_timout_cb, BS_NULL,
+                  BS_TIMER_FLAG_ONE_SHOT | BS_TIMER_FLAG_START);
     return 0;
 }
 

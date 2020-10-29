@@ -17,7 +17,7 @@
 #define DEMO_ADC_DEV_NAME            "adc0"
 
 static bs_device_t adc_dev = BS_NULL;
-static SoftTimer st_adc;
+static struct bs_timer st_adc;
 
 
 static void st_adc_timout_cb(void *args)

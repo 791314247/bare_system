@@ -14,10 +14,10 @@
 
 #ifdef BS_USING_DEMO_GPIO
 
-static SoftTimer led1;
-static SoftTimer led2;
-static SoftTimer led3;
-static SoftTimer led4;
+static struct bs_timer led1;
+static struct bs_timer led2;
+static struct bs_timer led3;
+static struct bs_timer led4;
 
 
 #define LED1_PIN    GET_PIN(C, 0)
@@ -67,14 +67,15 @@ int gpio_demo(void)
     bs_pin_mode(LED3_PIN, PIN_MODE_OUTPUT);
     bs_pin_mode(LED4_PIN, PIN_MODE_OUTPUT);
 
-    creat_continue_soft_timer(&led1, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 2, led1_timeout, BS_NULL);
-    creat_continue_soft_timer(&led2, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 3, led2_timeout, BS_NULL);
-    creat_continue_soft_timer(&led3, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 4, led3_timeout, BS_NULL);
-    creat_continue_soft_timer(&led4, RUN_IN_LOOP_MODE,
-                              TIMER_100MS_DELAY * 5, led4_timeout, BS_NULL);
+    bs_timer_init(&led1, TIMER_100MS_DELAY * 2, led1_timeout, BS_NULL,
+                  BS_TIMER_FLAG_PERIODIC | BS_TIMER_FLAG_START);
+    bs_timer_init(&led2, TIMER_100MS_DELAY * 3, led2_timeout, BS_NULL,
+                  BS_TIMER_FLAG_PERIODIC | BS_TIMER_FLAG_START);
+    bs_timer_init(&led3, TIMER_100MS_DELAY * 4, led3_timeout, BS_NULL,
+                  BS_TIMER_FLAG_PERIODIC | BS_TIMER_FLAG_START);
+    bs_timer_init(&led4, TIMER_100MS_DELAY * 5, led4_timeout, BS_NULL,
+                  BS_TIMER_FLAG_PERIODIC | BS_TIMER_FLAG_START);
+
     bs_kprintf("Gpio demo opened !");
     return 0;
 }
