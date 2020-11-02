@@ -15,7 +15,7 @@
 
 
 /************************** uart0 config **************************************/
-#if defined(BSP_USING_UART0)
+#if defined(BS_USING_UART0)
 #define BS_UART0_RX_BUFSZ         128
 #define BS_UART0_TX_BUFSZ         1
 #ifndef UART0_CONFIG
@@ -39,10 +39,10 @@
     BS_UART0_RX_BUFSZ,  /* buf size */     \
     0                                      \
 }
-#endif /* BSP_USING_UART0 */
+#endif /* BS_USING_UART0 */
 
 /************************** uart1 config **************************************/
-#if defined(BSP_USING_UART1)
+#if defined(BS_USING_UART1)
 #define BS_UART1_RX_BUFSZ         128
 #define BS_UART1_TX_BUFSZ         1
 #ifndef UART1_CONFIG
@@ -66,10 +66,10 @@
     BS_UART1_RX_BUFSZ,  /* buf size */     \
     0                                      \
 }
-#endif /* BSP_USING_UART1 */
+#endif /* BS_USING_UART1 */
 
 /************************** uart4 config **************************************/
-#if defined(BSP_USING_UART4)
+#if defined(BS_USING_UART4)
 #define BS_UART4_RX_BUFSZ         128
 #define BS_UART4_TX_BUFSZ         1
 #ifndef UART4_CONFIG
@@ -93,7 +93,7 @@
     BS_UART4_RX_BUFSZ,  /* buf size */     \
     0                                      \
 }
-#endif /* BSP_USING_UART4 */
+#endif /* BS_USING_UART4 */
 
 
 

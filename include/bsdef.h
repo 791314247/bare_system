@@ -53,7 +53,6 @@ typedef long                            bs_base_t;      /**< Nbit CPU related da
 typedef unsigned long                   bs_ubase_t;     /**< Nbit unsigned CPU related data type */
 
 typedef bs_base_t                       bs_err_t;       /**< Type for error number */
-typedef bs_uint32_t                     bs_time_t;      /**< Type for time stamp */
 typedef bs_uint32_t                     bs_tick_t;      /**< Type for tick count */
 typedef bs_base_t                       bs_flag_t;      /**< Type for flags */
 typedef bs_ubase_t                      bs_size_t;      /**< Type for size number */
@@ -235,10 +234,6 @@ typedef int (*init_fn_t)(void);
 #define BS_DEVICE_CTRL_BLK_AUTOREFRESH  0x13            /**< block device : enter/exit auto refresh mode */
 #define BS_DEVICE_CTRL_NETIF_GETMAC     0x10            /**< get mac address */
 #define BS_DEVICE_CTRL_MTD_FORMAT       0x10            /**< format a MTD device */
-#define BS_DEVICE_CTRL_RTC_GET_TIME     0x10            /**< get time */
-#define BS_DEVICE_CTRL_RTC_SET_TIME     0x11            /**< set time */
-#define BS_DEVICE_CTRL_RTC_GET_ALARM    0x12            /**< get alarm */
-#define BS_DEVICE_CTRL_RTC_SET_ALARM    0x13            /**< set alarm */
 
 /**
  * Double List structure

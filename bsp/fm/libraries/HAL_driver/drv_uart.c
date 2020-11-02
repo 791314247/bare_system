@@ -10,38 +10,38 @@
 #include <board.h>
 
 /*  When you USING SERIAL, you must define a serial port*/
-#if defined(BSP_USING_UART0) || defined(BSP_USING_UART1) || defined(BSP_USING_UART2) || \
-    defined(BSP_USING_UART3) || defined(BSP_USING_UART4) || defined(BSP_USING_UART5) || \
-    defined(BSP_USING_UART6) || defined(BSP_USING_UART7) || defined(BSP_USING_LPUART1)
+#if defined(BS_USING_UART0) || defined(BS_USING_UART1) || defined(BS_USING_UART2) || \
+    defined(BS_USING_UART3) || defined(BS_USING_UART4) || defined(BS_USING_UART5) || \
+    defined(BS_USING_UART6) || defined(BS_USING_UART7) || defined(BSP_USING_LPUART1)
 #include <drv_uart.h>
 
 #if defined(FM33LC0XX) /*The FM33LC0XX supported serial port is Uart0 Uart1 Uart4 Uart5 LUart1*/
-    #if defined(BSP_USING_UART2) || defined(BSP_USING_UART3) || defined(BSP_USING_LPUART0)
+    #if defined(BS_USING_UART2) || defined(BS_USING_UART3) || defined(BSP_USING_LPUART0)
         #error "FM33LC0XX nonsupport UART2 UART3 LUART0 !"
     #endif
 #endif
 
-#ifdef BSP_USING_UART0
+#ifdef BS_USING_UART0
     char uart0_rxbuf[BS_UART0_RX_BUFSZ];
     char uart0_txbuf[BS_UART0_TX_BUFSZ];
 #endif
-#ifdef BSP_USING_UART1
+#ifdef BS_USING_UART1
     char uart1_rxbuf[BS_UART1_RX_BUFSZ];
     char uart1_txbuf[BS_UART1_TX_BUFSZ];
 #endif
-#ifdef BSP_USING_UART2
+#ifdef BS_USING_UART2
     char uart2_rxbuf[BS_UART2_RX_BUFSZ];
     char uart2_txbuf[BS_UART2_TX_BUFSZ];
 #endif
-#ifdef BSP_USING_UART3
+#ifdef BS_USING_UART3
     char uart3_rxbuf[BS_UART3_RX_BUFSZ];
     char uart3_txbuf[BS_UART3_TX_BUFSZ];
 #endif
-#ifdef BSP_USING_UART4
+#ifdef BS_USING_UART4
     char uart4_rxbuf[BS_UART4_RX_BUFSZ];
     char uart4_txbuf[BS_UART4_TX_BUFSZ];
 #endif
-#ifdef BSP_USING_UART5
+#ifdef BS_USING_UART5
     char uart5_rxbuf[BS_UART5_RX_BUFSZ];
     char uart5_txbuf[BS_UART5_TX_BUFSZ];
 #endif
@@ -51,22 +51,22 @@
 #endif
 
 enum {
-#ifdef BSP_USING_UART0
+#ifdef BS_USING_UART0
     UART0_INDEX,
 #endif
-#ifdef BSP_USING_UART1
+#ifdef BS_USING_UART1
     UART1_INDEX,
 #endif
-#ifdef BSP_USING_UART2
+#ifdef BS_USING_UART2
     UART2_INDEX,
 #endif
-#ifdef BSP_USING_UART3
+#ifdef BS_USING_UART3
     UART3_INDEX,
 #endif
-#ifdef BSP_USING_UART4
+#ifdef BS_USING_UART4
     UART4_INDEX,
 #endif
-#ifdef BSP_USING_UART5
+#ifdef BS_USING_UART5
     UART5_INDEX,
 #endif
 #ifdef BSP_USING_LPUART1
@@ -75,22 +75,22 @@ enum {
 };
 
 static struct serial_configure serial_default_config[] = {
-#ifdef BSP_USING_UART0
+#ifdef BS_USING_UART0
     BS_UART0_CONFIG_DEFAULT,
 #endif
-#ifdef BSP_USING_UART1
+#ifdef BS_USING_UART1
     BS_UART1_CONFIG_DEFAULT,
 #endif
-#ifdef BSP_USING_UART2
+#ifdef BS_USING_UART2
     BS_UART2_CONFIG_DEFAULT,
 #endif
-#ifdef BSP_USING_UART3
+#ifdef BS_USING_UART3
     BS_UART3_CONFIG_DEFAULT,
 #endif
-#ifdef BSP_USING_UART4
+#ifdef BS_USING_UART4
     BS_UART4_CONFIG_DEFAULT,
 #endif
-#ifdef BSP_USING_UART5
+#ifdef BS_USING_UART5
     BS_UART5_CONFIG_DEFAULT,
 #endif
 #ifdef BSP_USING_LPUART1
@@ -100,22 +100,22 @@ static struct serial_configure serial_default_config[] = {
 
 
 static struct fm_uart_config uart_config[] = {
-#ifdef BSP_USING_UART0
+#ifdef BS_USING_UART0
     UART0_CONFIG,
 #endif
-#ifdef BSP_USING_UART1
+#ifdef BS_USING_UART1
     UART1_CONFIG,
 #endif
-#ifdef BSP_USING_UART2
+#ifdef BS_USING_UART2
     UART2_CONFIG,
 #endif
-#ifdef BSP_USING_UART3
+#ifdef BS_USING_UART3
     UART3_CONFIG,
 #endif
-#ifdef BSP_USING_UART4
+#ifdef BS_USING_UART4
     UART4_CONFIG,
 #endif
-#ifdef BSP_USING_UART5
+#ifdef BS_USING_UART5
     UART5_CONFIG,
 #endif
 #ifdef BSP_USING_LPUART1
@@ -288,7 +288,7 @@ static void uart_isr(struct bs_serial_device *serial)
 }
 
 
-#if defined(BSP_USING_UART0)
+#if defined(BS_USING_UART0)
 void UART0_IRQHandler(void)
 {
     /* enter interrupt */
@@ -297,7 +297,7 @@ void UART0_IRQHandler(void)
 }
 #endif
 
-#if defined(BSP_USING_UART1)
+#if defined(BS_USING_UART1)
 void UART1_IRQHandler(void)
 {
     /* enter interrupt */
@@ -306,7 +306,7 @@ void UART1_IRQHandler(void)
 }
 #endif
 
-#if defined(BSP_USING_UART2)
+#if defined(BS_USING_UART2)
 void UART2_IRQHandler(void)
 {
     /* enter interrupt */
@@ -315,7 +315,7 @@ void UART2_IRQHandler(void)
 }
 #endif
 
-#if defined(BSP_USING_UART3)
+#if defined(BS_USING_UART3)
 void UART3_IRQHandler(void)
 {
     /* enter interrupt */
@@ -324,7 +324,7 @@ void UART3_IRQHandler(void)
 }
 #endif
 
-#if defined(BSP_USING_UART4)
+#if defined(BS_USING_UART4)
 void UART4_IRQHandler(void)
 {
     /* enter interrupt */
@@ -333,7 +333,7 @@ void UART4_IRQHandler(void)
 }
 #endif
 
-#if defined(BSP_USING_UART5)
+#if defined(BS_USING_UART5)
 void UART5_IRQHandler(void)
 {
     /* enter interrupt */
@@ -360,41 +360,41 @@ static void GPIO_Configuration(void)
     GPIO_InitStruct.Pull = DISABLE;
     GPIO_InitStruct.RemapPin = DISABLE;
 
-#if defined(BSP_USING_UART0)
+#if defined(BS_USING_UART0)
     /* Make sure the UART RX and TX pins are enabled */
     GPIO_InitStruct.Pin = LL_GPIO_PIN_13 | LL_GPIO_PIN_14;
     LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-#endif /* BSP_USING_UART0 */
+#endif /* BS_USING_UART0 */
 
-#if defined(BSP_USING_UART1)
+#if defined(BS_USING_UART1)
     /* Make sure the UART RX and TX pins are enabled */
     GPIO_InitStruct.Pin = LL_GPIO_PIN_13 | LL_GPIO_PIN_14;
     LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-#endif /* BSP_USING_UART1 */
+#endif /* BS_USING_UART1 */
 
-#if defined(BSP_USING_UART2)
+#if defined(BS_USING_UART2)
     /* Make sure the UART RX and TX pins are enabled */
-#endif /* BSP_USING_UART2 */
+#endif /* BS_USING_UART2 */
 
-#if defined(BSP_USING_UART3)
+#if defined(BS_USING_UART3)
     /* Make sure the UART RX and TX pins are enabled */
-#endif /* BSP_USING_UART3 */
+#endif /* BS_USING_UART3 */
 
-#if defined(BSP_USING_UART4)
+#if defined(BS_USING_UART4)
     /* Make sure the UART RX and TX pins are enabled */
     GPIO_InitStruct.Pin = LL_GPIO_PIN_2 | LL_GPIO_PIN_3;
     LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-#endif /* BSP_USING_UART4 */
+#endif /* BS_USING_UART4 */
 
-#if defined(BSP_USING_UART5)
+#if defined(BS_USING_UART5)
     /* Make sure the UART RX and TX pins are enabled */
     GPIO_InitStruct.Pin = LL_GPIO_PIN_0 | LL_GPIO_PIN_1;
     LL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-#endif /* BSP_USING_UART5 */
+#endif /* BS_USING_UART5 */
 
 #if defined(BSP_USING_LPUART1)
     /* Make sure the UART RX and TX pins are enabled */
-#endif /* BSP_USING_UART5 */
+#endif /* BS_USING_UART5 */
 }
 
 
@@ -413,7 +413,7 @@ int bs_hw_usart_init(void)
 
     GPIO_Configuration();
 
-#ifdef BSP_USING_UART0
+#ifdef BS_USING_UART0
     /* init UART object */
     uart_obj[UART0_INDEX].config = &uart_config[UART0_INDEX];
     uart_obj[UART0_INDEX].serial.ops = &fm_uart_ops;
@@ -436,7 +436,7 @@ int bs_hw_usart_init(void)
                                    , &uart_config[UART0_INDEX]);
     BS_ASSERT(result == BS_EOK);
 #endif
-#ifdef BSP_USING_UART1
+#ifdef BS_USING_UART1
     /* init UART object */
     uart_obj[UART1_INDEX].config = &uart_config[UART1_INDEX];
     uart_obj[UART1_INDEX].serial.ops = &fm_uart_ops;
@@ -459,7 +459,7 @@ int bs_hw_usart_init(void)
                                    , &uart_config[UART1_INDEX]);
     BS_ASSERT(result == BS_EOK);
 #endif
-#ifdef BSP_USING_UART2
+#ifdef BS_USING_UART2
     /* init UART object */
     uart_obj[UART2_INDEX].config = &uart_config[UART2_INDEX];
     uart_obj[UART2_INDEX].serial.ops = &fm_uart_ops;
@@ -482,7 +482,7 @@ int bs_hw_usart_init(void)
                                    , &uart_config[UART2_INDEX]);
     BS_ASSERT(result == BS_EOK);
 #endif
-#ifdef BSP_USING_UART3
+#ifdef BS_USING_UART3
     /* init UART object */
     uart_obj[UART3_INDEX].config = &uart_config[UART3_INDEX];
     uart_obj[UART3_INDEX].serial.ops = &fm_uart_ops;
@@ -505,7 +505,7 @@ int bs_hw_usart_init(void)
                                    , &uart_config[UART3_INDEX]);
     BS_ASSERT(result == BS_EOK);
 #endif
-#ifdef BSP_USING_UART4
+#ifdef BS_USING_UART4
     /* init UART object */
     uart_obj[UART4_INDEX].config = &uart_config[UART4_INDEX];
     uart_obj[UART4_INDEX].serial.ops = &fm_uart_ops;
@@ -528,7 +528,7 @@ int bs_hw_usart_init(void)
                                    , &uart_config[UART4_INDEX]);
     BS_ASSERT(result == BS_EOK);
 #endif
-#ifdef BSP_USING_UART5
+#ifdef BS_USING_UART5
     /* init UART object */
     uart_obj[UART5_INDEX].config = &uart_config[UART5_INDEX];
     uart_obj[UART5_INDEX].serial.ops = &fm_uart_ops;

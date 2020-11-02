@@ -26,13 +26,6 @@ static bs_err_t adc_init(struct bs_device *dev)
 
 static bs_size_t adc_read(bs_device_t dev, bs_off_t pos, void *buffer, bs_size_t size)
 {
-    // bs_err_t result = BS_EOK;
-    // bs_size_t i;
-    // struct bs_adc_device *adc = (struct bs_adc_device *)dev;
-    // bs_uint32_t *value = (bs_uint32_t *)buffer;
-
-
-
     return 0;
 }
 

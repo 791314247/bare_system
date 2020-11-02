@@ -15,6 +15,7 @@
 #include "serial.h"
 #include "watchdog.h"
 #include "adc.h"
+#include "rtc.h"
 
 /* Components */
 #include "at_base.h"

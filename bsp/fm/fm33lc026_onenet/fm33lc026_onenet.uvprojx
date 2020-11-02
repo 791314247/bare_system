@@ -456,6 +456,11 @@
               <FileType>1</FileType>
               <FilePath>..\libraries\HAL_driver\drv_adc.c</FilePath>
             </File>
+            <File>
+              <FileName>drv_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\HAL_driver\drv_rtc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -480,6 +485,11 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\libmod\icp\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\libmod\icp\rtc.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -665,6 +675,11 @@
               <FileName>demo_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\demo\demo_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>demo_rtc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\demo\demo_rtc.c</FilePath>
             </File>
           </Files>
         </Group>
