@@ -18,16 +18,18 @@
 
 
 /* device selection */
-// #define BS_USING_UART1                        /* using at base */
+// #define BS_USING_UART1                     /* using at base */
 #define BS_USING_UART4                        /* using serial demo code */
 #define BS_USING_WDT
 #define BS_USING_RTC
+#define BSP_USING_ADC0
+
 
 /* components selection */
 // #define BS_USING_AT_BASE
 // #define BS_USING_AT_SERIAL         "uart1"
 // #define BS_USING_BC35
-#define BSP_USING_ADC0
+
 
 
 /* demo selection */

@@ -68,7 +68,7 @@ void bs_assert_set_hook(void (*hook)(const char *ex, const char *func, bs_size_t
 void bs_assert_handler(const char *ex, const char *func, bs_size_t line);
 void bs_kprintf(const char *fmt, ...);
 #else
-void bs_kprintf(...);
+#define bs_kprintf(...)
 #endif /* BS_DEBUG */
 
 
